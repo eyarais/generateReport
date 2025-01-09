@@ -4,91 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مولد تقرير يومي</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            direction: rtl;
-            text-align: right;
-            margin: 20px;
-            background: linear-gradient(45deg, #ffe6f7, #e6ccff);
-            color: #5d006e;
-        }
+    <title>مولد تقرير يومي </title>
+    <link href="style.css" rel="stylesheet" />
 
-        h1 {
-            color: #5d006e;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        h2,
-        h3,
-        h4 {
-            color: #9400d3;
-        }
-
-        .section {
-            margin-bottom: 20px;
-            padding: 20px;
-            border: 1px solid #d1c4e9;
-            border-radius: 10px;
-            background: #fce4ec;
-        }
-
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-
-        input,
-        textarea,
-        button {
-            border-radius: 5px;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            width: 50%;
-            padding: 5px;
-            margin-top: 5px;
-            border: 1px solid #ce93d8;
-        }
-
-        .output {
-            margin-top: 20px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            background: #f9f9f9;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        textarea {
-            width: 100%;
-            height: 200px;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #d500f9;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        button:hover {
-            background-color: #aa00ff;
-        }
-    </style>
 </head>
 
 <body>
-    <h1>🌸 مولد تقرير يومي 🌸</h1>
 
+    <h1>🌸 مولد تقرير يومي 🌸</h1>
+    <div id="container" class="section">
+        <h2>مؤقت</h2>
+        <div id="timer">00:00:00</div>
+        <div>
+            <button onclick="startTimer()">Start</button>
+            <button onclick="pauseTimer()">Pause</button>
+            <button onclick="resetTimer()">Reset</button>
+        </div>
+    </div>
     <div class="section">
         <label>
             تضمين ☂️ ورد الحفظ:
@@ -114,6 +46,7 @@
 
     <div class="section" id="cumulative-section">
         <h2>☂️ ورد التراكمي</h2>
+        <label>مدة التسجيل: <input type="text" id="cumulative-duration" placeholder="ساعات ودقائق"></label>
         <label>التكرار: <input type="number" id="cumulative-repetition" value="10"></label>
         <label>عدد الأخطاء: <input type="number" id="cumulative-errors" value="0"></label>
         <label>عدد الترددات: <input type="number" id="cumulative-frequency" value="0"></label>
@@ -153,14 +86,60 @@
         </label>
     </div>
 
-    <button onclick="generateReport()">إنشاء التقرير</button>
+    <button onclick="generateReport(); copyToClipboard()"> إنشاء التقرير ونسخه</button>
     <button onclick="copyToClipboard()">نسخ التقرير</button>
 
     <div id="output" class="output hidden">
         <textarea id="copy-field" readonly></textarea>
     </div>
-
     <script>
+
+        let timerInterval;
+        let elapsedTime = 0; // Time in seconds
+        let isRunning = false;
+
+        // Update the timer display
+        function updateTimerDisplay() {
+            const hours = String(Math.floor(elapsedTime / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((elapsedTime % 3600) / 60)).padStart(2, '0');
+            const seconds = String(elapsedTime % 60).padStart(2, '0');
+            document.getElementById('timer').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Start the timer
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                timerInterval = setInterval(() => {
+                    elapsedTime++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
+        //pause 
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+
+            // Update the pause field with the current timer value
+            const hours = String(Math.floor(elapsedTime / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((elapsedTime % 3600) / 60)).padStart(2, '0');
+            const seconds = String(elapsedTime % 60).padStart(2, '0');
+            document.getElementById('cumulative-duration').value = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // Reset the timer
+        function resetTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            updateTimerDisplay();
+        }
+
+        // Initialize the timer display
+        updateTimerDisplay();
+
+        // List of Surahs
         // List of Surahs
         const surahs = [
             "سورة ق",
@@ -228,6 +207,7 @@
 
             if (document.getElementById('include-cumulative').checked) {
                 output += `☂️ ورد التراكمي:\n`;
+                output += `\tمدة التسجيل: ${document.getElementById('cumulative-duration').value}\n`;
                 output += `\tالتكرار: ${document.getElementById('cumulative-repetition').value}\n`;
                 output += `\tعدد الأخطاء: ${document.getElementById('cumulative-errors').value}\n`;
                 output += `\tعدد الترددات: ${document.getElementById('cumulative-frequency').value}\n\n`;
@@ -262,6 +242,7 @@
             document.execCommand('copy');
             alert('تم نسخ التقرير إلى الحافظة!');
         }
+
     </script>
 </body>
 
