@@ -64,6 +64,7 @@ textarea {
 
 button {
   margin-top: 10px;
+  margin-bottom: 10px;
   padding: 10px 20px;
   background-color: #d500f9;
   color: white;
@@ -86,9 +87,8 @@ button:hover {
   background-color: #aa00ff;
 }
 footer {
-  margin-bottom: 20px;
+  padding: 0.5px;
   text-align: center;
-  padding: 5px;
-  background-color: #aa00ff;
-  color: #000;
+
+  color: #aa00ff;
 }

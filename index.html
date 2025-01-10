@@ -86,8 +86,8 @@
         </label>
     </div>
 
-    <button onclick="generateReport(); copyToClipboard()"> إنشاء التقرير ونسخه</button>
-    <button onclick="copyToClipboard()">نسخ التقرير</button>
+    <button onclick="handleButtonClick()">إنشاء التقرير ونسخه</button>
+
 
     <div id="output" class="output hidden">
         <textarea id="copy-field" readonly></textarea>
@@ -139,6 +139,28 @@
         // Initialize the timer display
         updateTimerDisplay();
 
+
+        /*
+        
+                // Handle page visibility changes
+                document.addEventListener('visibilitychange', () => {
+                    if (document.visibilityState === 'hidden' && isRunning) {
+                        // Stop the interval to save resources
+                        clearInterval(timerInterval);
+                    } else if (document.visibilityState === 'visible' && isRunning) {
+                        // Restart the timer interval and adjust elapsed time
+                        startTimestamp = Date.now() - elapsedTime * 1000;
+                        timerInterval = setInterval(() => {
+                            elapsedTime = Math.floor((Date.now() - startTimestamp) / 1000);
+                            updateTimerDisplay();
+                        }, 1000);
+                    }
+                });
+        */
+        // Initialize the timer display
+        updateTimerDisplay();
+
+        ///////******* end timerrrrrrrrrrrrrrrrr*******////////
         // List of Surahs
         // List of Surahs
         const surahs = [
@@ -192,7 +214,7 @@
             }
         };
 
-        function generateReport() {
+        async function generateReport() {
             const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
             let output = `🌸 تقرير يوم ${dayName} 🌸\n\n`;
 
@@ -234,6 +256,7 @@
             const copyField = document.getElementById('copy-field');
             copyField.value = output;
             document.getElementById('output').classList.remove('hidden');
+
         }
 
         function copyToClipboard() {
@@ -242,8 +265,19 @@
             document.execCommand('copy');
             alert('تم نسخ التقرير إلى الحافظة!');
         }
+        // Handle button click
+        async function handleButtonClick() {
+            await generateReport(); // Wait for report generation to complete
+            copyToClipboard(); // Copy to clipboard after completion
+        }
 
     </script>
+    <footer>
+        <footer>
+            <p>© 2025 برمجة الطويلبة <strong>آية الرايس </strong>غفر الله لها.</p>
+        </footer>
+
+    </footer>
 </body>
 
 </html>
