@@ -21,6 +21,8 @@
             <button onclick="resetTimer()">تصفير</button>
         </div>
     </div>
+
+
     <div class="section">
         <label>
             تضمين ☂️ ورد الحفظ:
@@ -140,23 +142,7 @@
         updateTimerDisplay();
 
 
-        /*
-        
-                // Handle page visibility changes
-                document.addEventListener('visibilitychange', () => {
-                    if (document.visibilityState === 'hidden' && isRunning) {
-                        // Stop the interval to save resources
-                        clearInterval(timerInterval);
-                    } else if (document.visibilityState === 'visible' && isRunning) {
-                        // Restart the timer interval and adjust elapsed time
-                        startTimestamp = Date.now() - elapsedTime * 1000;
-                        timerInterval = setInterval(() => {
-                            elapsedTime = Math.floor((Date.now() - startTimestamp) / 1000);
-                            updateTimerDisplay();
-                        }, 1000);
-                    }
-                });
-        */
+
         // Initialize the timer display
         updateTimerDisplay();
 
@@ -164,36 +150,88 @@
         // List of Surahs
         // List of Surahs
         const surahs = [
-            "سورة ق",
-            "سورة الذاريات",
-            "سورة الطور",
-            "سورة النجم",
-            "سورة القمر",
-            "سورة الرحمان",
-            "سورة الواقعة",
-            "سورة الحديد",
-            "سورة المجادلة",
-            "سورة الحشر",
-            "سورة الممتحنة",
-            "سورة الصف",
-            "سورة الجمعة",
-            "سورة المنافقون",
-            "سورة التغابن",
-            "سورة الطلاق",
-            "سورة التحريم"
+            { name: "سورة ق", juz: null },
+            { name: "سورة الذاريات", juz: "جزء 1" },
+            { name: "سورة الطور", juz: "جزء 1" },
+            { name: "سورة النجم", juz: "جزء 1" },
+            { name: "سورة القمر", juz: "جزء 1" },
+            { name: "سورة الرحمان", juz: "جزء 1" },
+            { name: "سورة الواقعة", juz: "جزء 1" },
+            { name: "سورة الحديد", juz: "جزء 1" },
+            { name: "سورة المجادلة", juz: "جزء 2" },
+            { name: "سورة الحشر", juz: "جزء 2" },
+            { name: "سورة الممتحنة", juz: "جزء 2" },
+            { name: "سورة الصف", juz: "جزء 2" },
+            { name: "سورة الجمعة", juz: "جزء 2" },
+            { name: "سورة المنافقون", juz: "جزء 2" },
+            { name: "سورة التغابن", juz: "جزء 2" },
+            { name: "سورة الطلاق", juz: "جزء 2" },
+            { name: "سورة التحريم", juz: "جزء 2" }
         ];
+
+
+        // Group surahs by juz
+        const parts = [];
+        surahs.forEach(surah => {
+            const juz = surah.juz || "غير محدد";  // If juz is null, label as "غير محدد"
+            let part = parts.find(p => p.name === juz);
+            if (!part) {
+                part = { name: juz, suras: [] };
+                parts.push(part);
+            }
+            part.suras.push(surah.name);
+        });
+
+
+        function calculateMistakesByJuzAndFrequencies() {
+            const mistakesByJuz = {};
+            const frequenciesByJuz = {};
+
+            // Loop through surahs to calculate mistakes and frequencies
+            surahs.forEach((surah, index) => {
+                const errors = parseInt(document.querySelectorAll('.errors')[index]?.value || 0);
+                const frequencies = parseInt(document.querySelectorAll('.frequencies')[index]?.value || 0);
+
+                if (surah.juz) {
+                    // Initialize `juz` if not already present
+                    if (!mistakesByJuz[surah.juz]) {
+                        mistakesByJuz[surah.juz] = 0;
+                        frequenciesByJuz[surah.juz] = 0;
+                    }
+
+                    // Accumulate errors and frequencies
+                    mistakesByJuz[surah.juz] += errors;
+                    frequenciesByJuz[surah.juz] += frequencies;
+                }
+            });
+
+            // Combine mistakes and frequencies into one object
+            const statsByJuz = {};
+            for (const juz in mistakesByJuz) {
+                statsByJuz[juz] = {
+                    mistakes: mistakesByJuz[juz],
+                    frequencies: frequenciesByJuz[juz],
+                };
+            }
+
+            return statsByJuz;
+        }
+
+
+
 
         const surahContainer = document.getElementById('surahs');
 
         surahs.forEach(surah => {
             const surahDiv = document.createElement('div');
             surahDiv.innerHTML = `
-                <h4>${surah}:</h4>
-                <label>عدد الأخطاء: <input type="number" class="errors" value="0"></label>
-                <label>عدد الترددات: <input type="number" class="frequencies" value="0"></label>
-            `;
+           <h4>${surah.name}:</h4>
+           <label>عدد الأخطاء: <input type="number" class="errors" value="0"></label>
+           <label>عدد الترددات: <input type="number" class="frequencies" value="0"></label>
+       `;
             surahContainer.appendChild(surahDiv);
         });
+
 
         document.getElementById('include-hifz').addEventListener('change', function () {
             document.getElementById('hifz-section').classList.toggle('hidden', !this.checked);
@@ -238,26 +276,50 @@
             output += `☂️ ورد التسميع:\n`;
             output += `\tمدة التسميع: ${document.getElementById('tasmi3-duration').value}\n`;
             output += `\tتم السماع لـ: ${document.getElementById('tasmi3-person').value}\n`;
+
+            // Calculate mistakes by جزء
+            const mistakesByJuz = { "جزء 1": 0, "جزء 2": 0 };
+
             surahs.forEach((surah, index) => {
-                const errors = document.querySelectorAll('.errors')[index].value;
+                const errors = parseInt(document.querySelectorAll('.errors')[index].value) || 0;
                 const frequencies = document.querySelectorAll('.frequencies')[index].value;
-                output += `\t💚 ${surah}:\n`;
+
+                // Add surah details to the output
+                output += `\t💚 ${surah.name}:\n`;
                 output += `\t\tعدد الأخطاء: ${errors}\n`;
                 output += `\t\tعدد الترددات: ${frequencies}\n\n`;
+
+                // Accumulate mistakes by جزء
+                if (surah.juz) {
+                    mistakesByJuz[surah.juz] += errors;
+                }
             });
 
-            output += `💎 المهام الأخرى:\n`;
+            // Add mistakes by جزء to the report
+            // Add mistakes and frequencies by Juz to the report
+            const statsByJuz = calculateMistakesByJuzAndFrequencies();
+            output += `📊 إحصائيات حسب الجزء:\n`;
+
+            for (const [juz, stats] of Object.entries(statsByJuz)) {
+                output += `\t${juz}:\n`;
+                output += `\t\tعدد الأخطاء: ${stats.mistakes}\n`;
+                output += `\t\tعدد الترددات: ${stats.frequencies}\n`;
+            }
+
+
+            output += `\n💎 المهام الأخرى:\n`;
             output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked').value}\n`;
             output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked').value}\n`;
             output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked').value}\n`;
             output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked').value}\n`;
             output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked').value}\n`;
-
+            output += `\tالحمد لله الذي يسر واعان 🥰\n`;
+            // Update the output field and make it visible
             const copyField = document.getElementById('copy-field');
             copyField.value = output;
             document.getElementById('output').classList.remove('hidden');
-
         }
+
 
         function copyToClipboard() {
             const copyField = document.getElementById('copy-field');
