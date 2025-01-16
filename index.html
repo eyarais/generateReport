@@ -96,6 +96,20 @@
     </div>
     <script>
 
+        function decrementValue(index, type) {
+            const input = document.querySelector(`.${type}[data-index="${index}"]`);
+            if (input) {
+                input.value = Math.max(0, parseInt(input.value) - 1);
+            }
+        }
+
+        function incrementValue(index, type) {
+            const input = document.querySelector(`.${type}[data-index="${index}"]`);
+            if (input) {
+                input.value = parseInt(input.value) + 1;
+            }
+        }
+
         let timerInterval;
         let elapsedTime = 0; // Time in seconds
         let isRunning = false;
@@ -222,13 +236,27 @@
 
         const surahContainer = document.getElementById('surahs');
 
-        surahs.forEach(surah => {
+        surahs.forEach((surah, index) => {
             const surahDiv = document.createElement('div');
             surahDiv.innerHTML = `
-           <h4>${surah.name}:</h4>
-           <label>عدد الأخطاء: <input type="number" class="errors" value="0"></label>
-           <label>عدد الترددات: <input type="number" class="frequencies" value="0"></label>
-       `;
+       <h4>${surah.name}:</h4>
+       <label>
+         عدد الأخطاء: 
+         <div style="display: flex; align-items: center; gap: 5px;">
+           <button type="button" class="small-button" onclick="decrementValue(${index}, 'errors')">-</button>
+           <input type="number" class="errors small-input" data-index="${index}" value="0" min="0">
+           <button type="button" class="small-button" onclick="incrementValue(${index}, 'errors')">+</button>
+         </div>
+       </label>
+       <label>
+         عدد الترددات: 
+         <div style="display: flex; align-items: center; gap: 5px;">
+           <button type="button" class="small-button" onclick="decrementValue(${index}, 'frequencies')">-</button>
+           <input type="number" class="frequencies small-input" data-index="${index}" value="0" min="0">
+           <button type="button" class="small-button" onclick="incrementValue(${index}, 'frequencies')">+</button>
+         </div>
+       </label>
+   `;
             surahContainer.appendChild(surahDiv);
         });
 
