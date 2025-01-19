@@ -115,9 +115,9 @@
             القبلي: <input type="radio" name="preparation" value="تم" checked>تم <input type="radio" name="preparation"
                 value="لم يتم">لم يتم </label><label>ورد التفسير: <input type="radio" name="tafseer" value="تم"
                 checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم </label>
-        <label>ورد المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio"
-                name="mihrab" value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar"
-                value="تم" checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
+        <label>المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio" name="mihrab"
+                value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar" value="تم"
+                checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
         </label><label>ورد المحراب: <input type="radio" name="mihrab" value="تم" checked>تم <input type="radio"
                 name="mihrab" value="لم يتم">لم يتم </label>
     </div><button onclick="handleButtonClick()">إنشاء التقرير ونسخه</button>
@@ -464,7 +464,7 @@
 
             // Check if the "اسم السورة" for الأخطاء should be included
             if (document.getElementById('ghaybi-errors').value > 0) {
-                output += `\tاسم السورة للأخطاء: ${document.getElementById('ghaybi-errors-surah').value}\n`;
+                output += `\tاسم السورالتي فيها أخطاء: ${document.getElementById('ghaybi-errors-surah').value}\n`;
             }
 
             output += `\tعدد الترددات: ${document.getElementById('ghaybi-frequency').value}\n`;
@@ -541,7 +541,7 @@
             output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked')?.value || "غير محدد"}\n`;
             output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
-            output += `\t المتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
+            output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked')?.value || "غير محدد"}\n`;
             output += `\n`;
