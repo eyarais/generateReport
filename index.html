@@ -12,7 +12,7 @@
 <body>
 
     <h1>🌸 مولد تقرير يومي 🌸</h1>
-    <div id="container" class="section">
+    <!--<div id="container" class="section">
         <h2> مؤقت لتسميع</h2>
         <div id="timer">00:00:00</div>
         <div>
@@ -20,7 +20,7 @@
             <button onclick="pauseTimer()">ايقاف</button>
             <button onclick="resetTimer()">تصفير</button>
         </div>
-    </div>
+    </div>-->
 
 
     <div class="section-toggle">
@@ -43,9 +43,6 @@
             تضمين ☂️ ورد الحفظ:
             <input type="checkbox" id="include-hifz" checked>
         </label>
-    </div>
-
-    <div class="section">
         <label>
             تضمين ☂️ ورد التراكمي:
             <input type="checkbox" id="include-cumulative" checked>
@@ -67,14 +64,40 @@
     </div>
     <div class="section" id="ghaybi-section">
         <h2>☂️ ورد الغيبي</h2>
+        <label> الجزء الغيبي:</label>
+        <!-- Create a select dropdown for Juz values -->
+        <select id="juz-select">
+            <option value="">اختر رقم الجزء</option> <!-- Default option -->
+        </select>
+
+        <br>
         <label>مدة التسجيل: <input type="text" id="ghaybi-duration" placeholder="ساعات ودقائق"></label>
-        <label>عدد الأخطاء: <input type="number" id="ghaybi-errors" value="0"></label>
+
+        <!-- Number of mistakes with increment and decrement buttons -->
+        <label>عدد الأخطاء:</label>
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-errors', 'errors', 'decrement')">-</button>
+        <input type="number" class="errors small-input" id="ghaybi-errors" value="0" data-surah="ghaybi-errors" min="0">
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-errors', 'errors', 'increment')">+</button>
+
+        <br>
         <label id="errors-surah-label" style="display: none;">اسم السورة : <input type="text"
                 id="ghaybi-errors-surah"></label>
-        <label>عدد الترددات: <input type="number" id="ghaybi-frequency" value="0"></label>
+
+        <!-- Number of frequencies with increment and decrement buttons -->
+        <label>عدد الترددات:</label>
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-frequency', 'frequencies', 'decrement')">-</button>
+        <input type="number" class="frequencies small-input" id="ghaybi-frequency" value="0"
+            data-surah="ghaybi-frequency">
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-frequency', 'frequencies', 'increment')">+</button>
+        <br>
         <label id="frequency-surah-label" style="display: none;">اسم السورة : <input type="text"
                 id="ghaybi-frequency-surah"></label>
     </div>
+
     <div class="section">
         <h2>☂️ ورد التسميع</h2><label>مدة التسميع: <input type="text" id="tasmi3-duration"
                 placeholder="ساعات ودقائق"></label><label>تم السماع لـ: <input type="text" id="tasmi3-person"
@@ -91,8 +114,10 @@
                 checked>تم <input type="radio" name="monthly-completion" value="لم يتم">لم يتم </label><label>التحضير
             القبلي: <input type="radio" name="preparation" value="تم" checked>تم <input type="radio" name="preparation"
                 value="لم يتم">لم يتم </label><label>ورد التفسير: <input type="radio" name="tafseer" value="تم"
-                checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم </label><label>ورد الأذكار: <input
-                type="radio" name="athkar" value="تم" checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
+                checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم </label>
+        <label>ورد المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio"
+                name="mihrab" value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar"
+                value="تم" checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
         </label><label>ورد المحراب: <input type="radio" name="mihrab" value="تم" checked>تم <input type="radio"
                 name="mihrab" value="لم يتم">لم يتم </label>
     </div><button onclick="handleButtonClick()">إنشاء التقرير ونسخه</button>
@@ -100,99 +125,145 @@
 
     <script>
         // List of Surahs
-        const surahs = [{ name: "سورة ق", juz: "جزء 27" },
-        { name: "سورة الذاريات", juz: "جزء 27" },
-        { name: "سورة الطور", juz: "جزء 27" },
-        { name: "سورة النجم", juz: "جزء 27" },
-        { name: "سورة القمر", juz: "جزء 27" },
-        { name: "سورة الرحمان", juz: "جزء 27" },
-        { name: "سورة الواقعة", juz: "جزء 27" },
-        { name: "سورة الحديد", juz: "جزء 27" },
-        { name: "سورة المجادلة", juz: "جزء 28" },
-        { name: "سورة الحشر", juz: "جزء 28" },
-        { name: "سورة الممتحنة", juz: "جزء 28" },
-        { name: "سورة الصف", juz: "جزء 28" },
-        { name: "سورة الجمعة", juz: "جزء 28" },
-        { name: "سورة المنافقون", juz: "جزء 28" },
-        { name: "سورة التغابن", juz: "جزء 28" },
-        { name: "سورة الطلاق", juz: "جزء 28" },
-        { name: "سورة التحريم", juz: "جزء 28" },
-        { name: "سورة الملك", juz: "جزء 29" },
-        { name: "سورة القلم", juz: "جزء 29" },
-        { name: "سورة الحاقة", juz: "جزء 29" },
-        { name: "سورة المعارج", juz: "جزء 29" },
-        { name: "سورة نوح", juz: "جزء 29" },
-        { name: "سورة الجن", juz: "جزء 29" },
-        { name: "سورة المزمل", juz: "جزء 29" },
-        { name: "سورة المدثر", juz: "جزء 29" },
-        { name: "سورة القيامة", juz: "جزء 29" },
-        { name: "سورة الإنسان", juz: "جزء 29" },
-        { name: "سورة المرسلات", juz: "جزء 29" },
-        { name: "سورة النبأ", juz: "جزء 30" },
-        { name: "سورة النازعات", juz: "جزء 30" },
-        { name: "سورة عبس", juz: "جزء 30" },
-        { name: "سورة التكوير", juz: "جزء 30" },
-        { name: "سورة الإنفطار", juz: "جزء 30" },
-        { name: "سورة المطففين", juz: "جزء 30" },
-        { name: "سورة الانشقاق", juz: "جزء 30" },
-        { name: "سورة البروج", juz: "جزء 30" },
-        { name: "سورة الطارق", juz: "جزء 30" },
-        { name: "سورة الأعلى", juz: "جزء 30" },
-        { name: "سورة الغاشية", juz: "جزء 30" },
-        { name: "سورة الفجر", juz: "جزء 30" },
-        { name: "سورة البلد", juz: "جزء 30" },
-        { name: "سورة الشمس", juz: "جزء 30" },
-        { name: "سورة الليل", juz: "جزء 30" },
-        { name: "سورة الضحى", juz: "جزء 30" },
-        { name: "سورة الشرح", juz: "جزء 30" },
-        { name: "سورة التين", juz: "جزء 30" },
-        { name: "سورة العلق", juz: "جزء 30" },
-        { name: "سورة القدر", juz: "جزء 30" },
-        { name: "سورة البينة", juz: "جزء 30" },
-        { name: "سورة الزلزلة", juz: "جزء 30" },
-        { name: "سورة العاديات", juz: "جزء 30" },
-        { name: "سورة القارعة", juz: "جزء 30" },
-        { name: "سورة التكاثر", juz: "جزء 30" },
-        { name: "سورة العصر", juz: "جزء 30" },
-        { name: "سورة الهمزة", juz: "جزء 30" },
-        { name: "سورة الفيل", juz: "جزء 30" },
-        { name: "سورة قريش", juz: "جزء 30" },
-        { name: "سورة الماعون", juz: "جزء 30" },
-        { name: "سورة الكوثر", juz: "جزء 30" },
-        { name: "سورة الكافرون", juz: "جزء 30" },
-        { name: "سورة النصر", juz: "جزء 30" },
-        { name: "سورة المسد", juz: "جزء 30" },
-        { name: "سورة الإخلاص", juz: "جزء 30" },
-        { name: "سورة الفلق", juz: "جزء 30" },
-        { name: "سورة الناس", juz: "جزء 30" }
+        const surahs = [
+            { name: "سورة ق", juz: "حزب 53" },
+            { name: "سورة الذاريات", juz: "حزب 53" },
+            { name: "سورة الطور", juz: "حزب 53" },
+            { name: "سورة النجم", juz: "حزب 53" },
+            { name: "سورة القمر", juz: "حزب 53" },
+            { name: "سورة الرحمان", juz: "حزب 54" },
+            { name: "سورة الواقعة", juz: "حزب 54" },
+            { name: "سورة الحديد", juz: "حزب 54" },
+            { name: "سورة المجادلة", juz: "حزب 55" },
+            { name: "سورة الحشر", juz: "حزب 55" },
+            { name: "سورة الممتحنة", juz: "حزب 55" },
+            { name: "سورة الصف", juz: "حزب 55" },
+            { name: "سورة الجمعة", juz: "حزب 56" },
+            { name: "سورة المنافقون", juz: "حزب 56" },
+            { name: "سورة التغابن", juz: "حزب 56" },
+            { name: "سورة الطلاق", juz: "حزب 56" },
+            { name: "سورة التحريم", juz: "حزب 56" },
+            { name: "سورة الملك", juz: "حزب 57" },
+            { name: "سورة القلم", juz: "حزب 57" },
+            { name: "سورة الحاقة", juz: "حزب 57" },
+            { name: "سورة المعارج", juz: "حزب 57" },
+            { name: "سورة نوح", juz: "حزب 57" },
+            { name: "سورة الجن", juz: "حزب 58" },
+            { name: "سورة المزمل", juz: "حزب 58" },
+            { name: "سورة المدثر", juz: "حزب 58" },
+            { name: "سورة القيامة", juz: "حزب 58" },
+            { name: "سورة الإنسان", juz: "حزب 58" },
+            { name: "سورة المرسلات", juz: "حزب 58" },
+            { name: "سورة النبأ", juz: "حزب 59" },
+            { name: "سورة النازعات", juz: "حزب 59" },
+            { name: "سورة عبس", juz: "حزب 59" },
+            { name: "سورة التكوير", juz: "حزب 59" },
+            { name: "سورة الإنفطار", juz: "حزب 59" },
+            { name: "سورة المطففين", juz: "حزب 59" },
+            { name: "سورة الانشقاق", juz: "حزب 59" },
+            { name: "سورة البروج", juz: "حزب 59" },
+            { name: "سورة الطارق", juz: "حزب 59" },
+            { name: "سورة الأعلى", juz: "حزب 60" },
+            { name: "سورة الغاشية", juz: "حزب 60" },
+            { name: "سورة الفجر", juz: "حزب 60" },
+            { name: "سورة البلد", juz: "حزب 60" },
+            { name: "سورة الشمس", juz: "حزب 60" },
+            { name: "سورة الليل", juz: "حزب 60" },
+            { name: "سورة الضحى", juz: "حزب 60" },
+            { name: "سورة الشرح", juz: "حزب 60" },
+            { name: "سورة التين", juz: "حزب 60" },
+            { name: "سورة العلق", juz: "حزب 60" },
+            { name: "سورة القدر", juz: "حزب 60" },
+            { name: "سورة البينة", juz: "حزب 60" },
+            { name: "سورة الزلزلة", juz: "حزب 60" },
+            { name: "سورة العاديات", juz: "حزب 60" },
+            { name: "سورة القارعة", juz: "حزب 60" },
+            { name: "سورة التكاثر", juz: "حزب 60" },
+            { name: "سورة العصر", juz: "حزب 60" },
+            { name: "سورة الهمزة", juz: "حزب 60" },
+            { name: "سورة الفيل", juz: "حزب 60" },
+            { name: "سورة قريش", juz: "حزب 60" },
+            { name: "سورة الماعون", juz: "حزب 60" },
+            { name: "سورة الكوثر", juz: "حزب 60" },
+            { name: "سورة الكافرون", juz: "حزب 60" },
+            { name: "سورة النصر", juz: "حزب 60" },
+            { name: "سورة المسد", juz: "حزب 60" },
+            { name: "سورة الإخلاص", juz: "حزب 60" },
+            { name: "سورة الفلق", juz: "حزب 60" },
+            { name: "سورة الناس", juz: "حزب 60" }
         ];
 
-        const errorsInput = document.getElementById('ghaybi-errors');
-        const frequencyInput = document.getElementById('ghaybi-frequency');
-        const errorsSurahLabel = document.getElementById('errors-surah-label');
-        const frequencySurahLabel = document.getElementById('frequency-surah-label');
 
-        // Function to toggle the visibility of the "اسم السورة" fields
-        function toggleSurahFields() {
-            if (errorsInput.value > 0) {
-                errorsSurahLabel.style.display = 'block';
-            } else {
-                errorsSurahLabel.style.display = 'none';
-            }
 
-            if (frequencyInput.value > 0) {
-                frequencySurahLabel.style.display = 'block';
-            } else {
-                frequencySurahLabel.style.display = 'none';
-            }
+        // Function to extract unique 'juz' values and populate the select dropdown
+        function populateJuzDropdown() {
+            const juzSelect = document.getElementById("juz-select");
+
+            // Extract unique 'juz' values
+            const uniqueJuz = [...new Set(surahs.map(item => item.juz))];
+
+            // Populate the dropdown with unique juz values
+            uniqueJuz.forEach(juz => {
+                const option = document.createElement("option");
+                option.value = juz;
+                option.textContent = juz;
+                juzSelect.appendChild(option);
+            });
         }
 
-        // Attach event listeners to the inputs to call the toggle function when values change
-        errorsInput.addEventListener('input', toggleSurahFields);
-        frequencyInput.addEventListener('input', toggleSurahFields);
+        // Call the function to populate the dropdown when the page loads
+        populateJuzDropdown();
+
+
+
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const errorsInput = document.getElementById('ghaybi-errors');
+            const frequencyInput = document.getElementById('ghaybi-frequency');
+            const errorsSurahLabel = document.getElementById('errors-surah-label');
+            const frequencySurahLabel = document.getElementById('frequency-surah-label');
+
+            // Function to toggle the visibility of the "اسم السورة" fields
+            function toggleSurahFields() {
+                // Show or hide "اسم السورة" for errors
+                if (parseInt(errorsInput.value) > 0) {
+                    errorsSurahLabel.style.display = 'block';
+                } else {
+                    errorsSurahLabel.style.display = 'none';
+                }
+
+                // Show or hide "اسم السورة" for frequencies
+                if (parseInt(frequencyInput.value) > 0) {
+                    frequencySurahLabel.style.display = 'block';
+                } else {
+                    frequencySurahLabel.style.display = 'none';
+                }
+            }
+
+            // Call toggleSurahFields initially to set the correct visibility on page load
+            toggleSurahFields();
+
+            // Function to handle the increment and decrement buttons
+            window.changeValue = function (inputId, type, action) {
+                const inputElement = document.getElementById(inputId);
+                let currentValue = parseInt(inputElement.value);
+
+                if (action === 'increment') {
+                    currentValue++;
+                } else if (action === 'decrement' && currentValue > 0) {
+                    currentValue--;
+                }
+
+                inputElement.value = currentValue;
+
+                // Call the toggle function after updating the value
+                toggleSurahFields();
+            };
+        });
 
         // Initialize visibility on page load
-        toggleSurahFields();
+
         function toggleSelection() {
             const selectionSection = document.getElementById("selection-section");
             const toggleButton = document.getElementById("toggle-selection");
@@ -215,8 +286,8 @@
         const partsContainer = document.getElementById("parts-container");
 
         // Generate Juz dynamically from Juz 1 to Juz 30
-        for (let i = 1; i <= 30; i++) {
-            const juz = `جزء ${i}`;
+        for (let i = 1; i <= 60; i++) {
+            const juz = `حزب ${i}`;
             if (groupedSurahs[juz]) {
                 const partDiv = document.createElement("div");
                 partDiv.className = "part";
@@ -225,7 +296,7 @@
                 const partHeader = document.createElement("div");
                 partHeader.className = "part-header";
                 partHeader.innerHTML = `
-                <input type="checkbox" id="juz-${i}" ${i === 27 || i === 28 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
+                <input type="checkbox" id="juz-${i}" ${i === 54 || i === 53 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
                 <label for="juz-${i}">${juz}</label>
                 <button class="expand-btn" onclick="toggleDropdown(${i})">⬇️</button>
             `;
@@ -248,7 +319,7 @@
                     suraCheckbox.type = "checkbox";
                     suraCheckbox.id = `sura-${i}-${suraIndex}`;
                     suraCheckbox.value = sura;  // Ensure the sura name is properly set
-                    suraCheckbox.checked = i === 27 || i === 28; // Check by default for Juz 1 and Juz 2
+                    suraCheckbox.checked = i === 54 || i === 53; // Check by default for Juz 1 and Juz 2
                     suraCheckbox.onclick = () => toggleSurahDetails(sura, suraCheckbox.checked, i); // Pass Juz number
 
                     const suraLabel = document.createElement("label");
@@ -296,17 +367,26 @@
                 surasDiv.style.display = "block"; // Show the dropdown for this Juz
             }
         }
+        /*function changeValue(id, type, action) {
+            const element = document.getElementById(id);
+            const value = parseInt(element.value);
+            const newValue = action === 'increment' ? value + 1 : value - 1;
+            element.value = Math.max(newValue, 0);
+        }*/function changeValue(id, type, action) {
+            // Get the element by the passed ID (for Tasmi3 or Ghaybi)
+            const element = document.getElementById(id);
 
+            // If the element doesn't exist, exit the function
+            if (!element) return;
 
-        function changeValue(surahName, type, action) {
-            const inputField = document.querySelector(`.${type}[data-surah='${surahName}']`); // Select the correct input based on the type ('errors' or 'frequencies')
-            let currentValue = parseInt(inputField.value);
-            if (action === 'increment') {
-                currentValue += 1;
-            } else if (action === 'decrement' && currentValue > 0) {
-                currentValue -= 1;
-            }
-            inputField.value = currentValue;
+            // Get the current value of the input field
+            const value = parseInt(element.value);
+
+            // Increment or decrement the value
+            const newValue = action === 'increment' ? value + 1 : value - 1;
+
+            // Ensure the value doesn't go below zero
+            element.value = Math.max(newValue, 0);
         }
 
         // Function to toggle Surah details
@@ -321,16 +401,16 @@
                     detailDiv.id = `detail-${surahName}`;
                     detailDiv.dataset.juz = juz;
                     detailDiv.innerHTML = `
-                <h4>${surahName}:</h4>
+                 <h4>${surahName}:</h4>
                 <label>عدد الأخطاء:</label>
-                <button type="button" class="small-button" onclick="changeValue('${surahName}', 'errors', 'decrement')">-</button>
-                <input type="number" class="errors small-input" data-surah="${surahName}" value="0" min="0">
-                <button type="button" class="small-button" onclick="changeValue('${surahName}', 'errors', 'increment')">+</button>
+                <button type="button" class="small-button" onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
+                <input type="number" class="errors small-input" id="errors-${surahName}" data-surah="${surahName}" value="0" min="0">
+                <button type="button" class="small-button" onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
                 <br>
                 <label>عدد الترددات:</label>
-                <button type="button" class="small-button" onclick="changeValue('${surahName}', 'frequencies', 'decrement')">-</button>
-                <input type="number" class="frequencies small-input" data-surah="${surahName}" value="0">
-                <button type="button" class="small-button" onclick="changeValue('${surahName}', 'frequencies', 'increment')">+</button>
+                <button type="button" class="small-button" onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
+                <input type="number" class="frequencies small-input" id="frequencies-${surahName}" data-surah="${surahName}" value="0">
+                <button type="button" class="small-button" onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
             `;
                     selectedDetailsDiv.appendChild(detailDiv);
                 }
@@ -376,8 +456,9 @@
                 output += `\tعدد الأخطاء: ${document.getElementById('cumulative-errors').value || "0"}\n`;
                 output += `\tعدد الترددات: ${document.getElementById('cumulative-frequency').value || "0"}\n\n`;
             }
-
+            const selectedOption = document.getElementById("juz-select").value;
             output += `☂️ ورد الغيبي:\n`;
+            output += `\t${selectedOption}\n`;
             output += `\tمدة التسجيل: ${document.getElementById('ghaybi-duration').value}\n`;
             output += `\tعدد الأخطاء: ${document.getElementById('ghaybi-errors').value}\n`;
 
@@ -460,6 +541,7 @@
             output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked')?.value || "غير محدد"}\n`;
             output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
+            output += `\t المتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked')?.value || "غير محدد"}\n`;
             output += `\n`;
