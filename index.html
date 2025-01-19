@@ -127,6 +127,22 @@
     <div id="output" class="output hidden"><textarea id="copy-field" readonly></textarea></div>
 
     <script>
+        // Function to toggle visibility based on the checkbox state
+        document.getElementById("include-hifz").addEventListener("change", function () {
+            var hifzChecked = this.checked;
+
+            // Hide or show the Motchebeh and Tafsir radio buttons based on the checkbox state
+            document.querySelector('input[name="motchebeh"]').parentElement.style.display = hifzChecked ? "block" : "none";
+            document.querySelector('input[name="tafseer"]').parentElement.style.display = hifzChecked ? "block" : "none";
+        });
+
+        // Initialize on page load based on the checkbox's default state
+        window.addEventListener('DOMContentLoaded', (event) => {
+            var hifzChecked = document.getElementById("include-hifz").checked;
+
+            document.querySelector('input[name="motchebeh"]').parentElement.style.display = hifzChecked ? "block" : "none";
+            document.querySelector('input[name="tafseer"]').parentElement.style.display = hifzChecked ? "block" : "none";
+        });
         // List of Surahs
         const surahs = [
             { name: "سورة ق", juz: "حزب 53" },
@@ -562,8 +578,17 @@
             output += `\n💎 المهام الأخرى:\n`;
             output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked')?.value || "غير محدد"}\n`;
             output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked')?.value || "غير محدد"}\n`;
-            output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
-            output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
+            //   output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
+            //  output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
+            // Check if Motchebeh is visible before including it in the output
+            if (document.querySelector('input[name="motchebeh"]').parentElement.style.display !== "none") {
+                output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
+            }
+            if (document.querySelector('input[name="tafseer"]').parentElement.style.display !== "none") {
+                output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
+            }
+
+
             output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked')?.value || "غير محدد"}\n`;
             output += `\n`;
