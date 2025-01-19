@@ -43,12 +43,13 @@
             تضمين ☂️ ورد الحفظ:
             <input type="checkbox" id="include-hifz" checked>
         </label>
+    </div>
+    <div class="section">
         <label>
             تضمين ☂️ ورد التراكمي:
             <input type="checkbox" id="include-cumulative" checked>
         </label>
     </div>
-
     <div class="section" id="hifz-section">
         <h2>☂️ ورد الحفظ</h2><label>اسم السورة: <input type="text" id="hifz-surah"
                 placeholder="اكتب اسم السورة"></label><label>مدة التسجيل: <input type="text" id="hifz-duration"
@@ -111,10 +112,12 @@
 
     <div class="section">
         <h2>💎 المهام الأخرى</h2><label>ورد الختمة الشهرية: <input type="radio" name="monthly-completion" value="تم"
-                checked>تم <input type="radio" name="monthly-completion" value="لم يتم">لم يتم </label><label>التحضير
+                checked>تم <input type="radio" name="monthly-completion" value="لم يتم">لم يتم
+        </label><label>التحضير
             القبلي: <input type="radio" name="preparation" value="تم" checked>تم <input type="radio" name="preparation"
                 value="لم يتم">لم يتم </label><label>ورد التفسير: <input type="radio" name="tafseer" value="تم"
-                checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم </label>
+                checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم
+        </label>
         <label>المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio" name="mihrab"
                 value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar" value="تم"
                 checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
@@ -215,8 +218,27 @@
         populateJuzDropdown();
 
 
+        document.addEventListener('DOMContentLoaded', function () {
+            const hifzCheckbox = document.getElementById('include-hifz');
+            const cumulativeCheckbox = document.getElementById('include-cumulative');
+            const hifzSection = document.getElementById('hifz-section');
+            const cumulativeSection = document.getElementById('cumulative-section');
 
+            // Function to toggle visibility of sections
+            function toggleSections() {
+                hifzSection.style.display = hifzCheckbox.checked ? 'block' : 'none';
+                cumulativeSection.style.display = cumulativeCheckbox.checked ? 'block' : 'none';
+            }
 
+            // Call the function to set the initial visibility
+            toggleSections();
+
+            // Add event listeners to the checkboxes
+            hifzCheckbox.addEventListener('change', toggleSections);
+            cumulativeCheckbox.addEventListener('change', toggleSections);
+        });
+
+        //toglle filed 
 
         document.addEventListener('DOMContentLoaded', function () {
             const errorsInput = document.getElementById('ghaybi-errors');
