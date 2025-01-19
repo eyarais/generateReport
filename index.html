@@ -133,9 +133,9 @@
                 value="لم يتم">لم يتم </label><label>ورد التفسير: <input type="radio" name="tafseer" value="تم"
                 checked>تم <input type="radio" name="tafseer" value="لم يتم">لم يتم
         </label>
-        <label>المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio" name="mihrab"
-                value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar" value="تم"
-                checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
+        <label>المتشابهات: <input type="radio" name="motchebeh" value="تم" checked>تم <input type="radio"
+                name="motchebeh" value="لم يتم">لم يتم </label><label>ورد الأذكار: <input type="radio" name="athkar"
+                value="تم" checked>تم <input type="radio" name="athkar" value="لم يتم">لم يتم
         </label><label>ورد المحراب: <input type="radio" name="mihrab" value="تم" checked>تم <input type="radio"
                 name="mihrab" value="لم يتم">لم يتم </label>
     </div><button onclick="handleButtonClick()">إنشاء التقرير ونسخه</button>
@@ -615,13 +615,18 @@
             document.getElementById('output').classList.remove('hidden');
         }
 
-
+        function copyToClipboard() {
+            const copyField = document.getElementById('copy-field');
+            copyField.select();
+            document.execCommand('copy');
+            alert('تم نسخ التقرير إلى الحافظة!');
+        }
         // Handle button click
         async function handleButtonClick() {
             await generateReport(); // Wait for report generation to complete
             copyToClipboard(); // Copy to clipboard after completion
         }
-        console.log(`Surah: ${surahName}, Errors: ${errors}, Frequencies: ${frequencies}`);
+
 
 
     </script>
