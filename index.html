@@ -2,25 +2,45 @@
 <html lang="ar">
 <!-- Header Section -->
 <header
-    style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px;  background: linear-gradient(45deg, #faa0dc, #d291bc); border-bottom: 1px solid #ddd;  ">
+    style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: linear-gradient(45deg, #faa0dc, #d291bc); border-bottom: 1px solid #ddd;">
     <!-- Logo -->
     <div>
         <img src="img/ataa.png" alt="Logo" style="height: 50px; max-width: 100px;">
     </div>
     <!-- Title -->
-    <h1 style="flex: 1; text-align: center; font-size: 24px; margin: 0;"> 🌸 مولد تقرير يومي لبرنامج عطاء🌸</h1>
+    <h1 style="flex: 1; text-align: center; font-size: 24px; margin: 0;">🌸 مولد تقرير يومي لبرنامج عطاء🌸</h1>
     <!-- Empty Placeholder (optional, for spacing or future use) -->
-    <div style=" width: 100px;">
-    </div>
+    <div style="width: 100px;"></div>
 </header>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/gif" href="ataa.png">
-    <title>مولد تقرير يومي في برنامج عطاء </title>
+    <title>مولد تقرير يومي في برنامج عطاء</title>
     <link href="style.css" rel="stylesheet" />
+    <style>
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                text-align: center;
+                padding: 15px 10px;
+            }
 
+            header h1 {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+            header img {
+                height: 40px;
+            }
+
+            header div {
+                width: 80px;
+            }
+        }
+    </style>
 </head>
 
 
@@ -39,12 +59,12 @@
 
 
     <div class="section-toggle">
-        <button id="toggle-selection" onclick="toggleSelection()">📖 اختر الأحزاب والسور لتسميع</button>
+        <button id="toggle-selection" onclick="toggleSelection()">📖 اضغط هنا لاختيار الأحزاب والسور لتسميع</button>
     </div>
 
     <div id="selection-section" class="hidden">
         <div class="section">
-            <h2>🌙 اختر الأحزاب والسور </h2>
+            <h2>🌙 اختر الأحزاب والسور المراد تسميعها</h2>
             <div id="parts-container" class="parts-container">
                 <!-- Juz and Surah dropdowns will be dynamically populated here -->
             </div>
@@ -160,7 +180,7 @@
         });
         // List of Surahs
         const surahs = [
-            { name: "سورة ق", juz: "حزب 53" },
+            { name: "سورة ق", juz: "حزب 52" },
             { name: "سورة الذاريات", juz: "حزب 53" },
             { name: "سورة الطور", juz: "حزب 53" },
             { name: "سورة النجم", juz: "حزب 53" },
@@ -229,23 +249,22 @@
 
 
 
-        // Function to extract unique 'juz' values and populate the select dropdown
+        // Function to extract unique 'juz' values and populate the select dropdown with the first Surah of each Juz
         function populateJuzDropdown() {
             const juzSelect = document.getElementById("juz-select");
 
             // Extract unique 'juz' values
             const uniqueJuz = [...new Set(surahs.map(item => item.juz))];
 
-            // Populate the dropdown with unique juz values
+            // Populate the dropdown with unique juz values and the name of the first Surah in each Juz
             uniqueJuz.forEach(juz => {
+                const firstSurah = surahs.find(surah => surah.juz === juz); // Find the first Surah for the Juz
                 const option = document.createElement("option");
-                option.value = juz;
-                option.textContent = juz;
+                option.value = `${juz}: حزب ${firstSurah.name}`;
+                option.textContent = `${juz}: حزب ${firstSurah.name}`;
                 juzSelect.appendChild(option);
             });
         }
-
-        // Call the function to populate the dropdown when the page loads
         populateJuzDropdown();
 
 
@@ -341,16 +360,17 @@
         // Generate Juz dynamically from Juz 1 to Juz 30
         for (let i = 1; i <= 60; i++) {
             const juz = `حزب ${i}`;
+
             if (groupedSurahs[juz]) {
                 const partDiv = document.createElement("div");
                 partDiv.className = "part";
-
+                const firstSurah = surahs.find(surah => surah.juz === juz);
                 // Juz Header
                 const partHeader = document.createElement("div");
                 partHeader.className = "part-header";
                 partHeader.innerHTML = `
                 <input type="checkbox" id="juz-${i}" ${i === 54 || i === 53 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
-                <label for="juz-${i}">${juz}</label>
+                <label for="juz-${i}">${juz} : حزب ${firstSurah.name}</label>
                 <button class="expand-btn" onclick="toggleDropdown(${i})">⬇️</button>
             `;
 
@@ -577,9 +597,9 @@
 
             Object.keys(cumulativeTotals).forEach((juz) => {
                 const totals = cumulativeTotals[juz];
-
+                const firstSurah = surahs.find(surah => surah.juz === juz);
                 // Always show statistics, even if they are zero
-                output += `\n${juz}:\n`;
+                output += `\n${juz}: حزب ${firstSurah.name}:\n`;
                 output += `\tعدد الأخطاء: ${totals.mistakes || 0}\n`;
                 output += `\tعدد الترددات: ${totals.frequencies || 0}\n`;
             });
@@ -593,8 +613,6 @@
             output += `\n💎 المهام الأخرى:\n`;
             output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked')?.value || "غير محدد"}\n`;
             output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked')?.value || "غير محدد"}\n`;
-            //   output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
-            //  output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
             // Check if Motchebeh is visible before including it in the output
             if (document.querySelector('input[name="motchebeh"]').parentElement.style.display !== "none") {
                 output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
