@@ -645,18 +645,9 @@
             alert('تم نسخ التقرير! رزقكم الله الختم القريب! 💚');
         }
         /*viisssssssssit to see if i should update it or not */
-        const namespace = 'eyarais.github.io'; // Your domain or a unique name
-        const key = 'home-page'; // Any unique identifier for the page
 
-        // Track visitor count (increment on page load)
-        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log('Visitor Count:', data.value); // Log the count in the console
-            })
-            .catch(error => {
-                console.error('Error fetching visitor count:', error);
-            });
+
+
 
         // Handle button click
         async function handleButtonClick() {
@@ -667,6 +658,20 @@
 
 
 
+    </script>
+    <script type="module">
+        // const countapi = require('countapi-js');
+
+        // or with ES6
+        import countapi from 'countapi-js';
+
+
+        // Fetch the visit count
+        countapi.visits().then((result) => {
+            console.log("Visit count:", result.value);
+        }).catch((error) => {
+            console.error("Error fetching visit count:", error);
+        });
     </script>
     <footer>
         <footer>
