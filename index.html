@@ -8,15 +8,19 @@
         <img src="img/ataa.png" alt="Logo" style="height: 50px; max-width: 100px;">
     </div>
     <!-- Title -->
-    <h1 style="flex: 1; text-align: center; font-size: 24px; margin: 0;">🌸 مولد تقرير يومي لبرنامج عطاء🌸</h1>
+    <h1 style="flex: 1; text-align: center; font-size: 24px; margin: 0;">مولد تقرير يومي لبرنامج عطاء (موقع غير رسمي)
+    </h1>
     <!-- Empty Placeholder (optional, for spacing or future use) -->
     <div style="width: 100px;"></div>
 </header>
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/gif" href="ataa.png">
+    </a>
+
     <title>مولد تقرير يومي في برنامج عطاء</title>
     <link href="style.css" rel="stylesheet" />
     <style>
@@ -93,7 +97,9 @@
                 value="0"></label><label>عدد الترددات: <input type="number" id="hifz-frequency" value="0"></label>
     </div>
     <div class="section" id="cumulative-section">
-        <h2>☂️ ورد التراكمي</h2><label>مدة التسجيل: <input type="text" id="cumulative-duration"
+        <h2>☂️ ورد التراكمي</h2>
+        <label>صفحات التراكمي: <input type="text" id="cumulative-pages" placeholder="أوجه التراكمي"></label>
+        <label>مدة التسجيل: <input type="text" id="cumulative-duration"
                 placeholder="ساعات ودقائق"></label><label>التكرار: <input type="number" id="cumulative-repetition"
                 value="10"></label><label>عدد الأخطاء: <input type="number" id="cumulative-errors"
                 value="0"></label><label>عدد الترددات: <input type="number" id="cumulative-frequency" value="0"></label>
@@ -136,8 +142,8 @@
 
     <div class="section">
         <h2>☂️ ورد التسميع</h2><label>مدة التسميع: <input type="text" id="tasmi3-duration"
-                placeholder="ساعات ودقائق"></label><label>تم السماع لـ: <input type="text" id="tasmi3-person"
-                value="سمعت على اختي القرانية"></label>
+                placeholder="ساعات ودقائق"></label><label>تم التسميع : <input type="text" id="tasmi3-person"
+                value="والسماع على أختي القرانية"></label>
         <h3>السور</h3>
         <div id="selected-details">
             <!-- Selected Surah/Juz details will appear here -->
@@ -246,8 +252,6 @@
             { name: "سورة الفلق", juz: "حزب 60" },
             { name: "سورة الناس", juz: "حزب 60" }
         ];
-
-
 
         // Function to extract unique 'juz' values and populate the select dropdown with the first Surah of each Juz
         function populateJuzDropdown() {
@@ -524,6 +528,7 @@
             // Include ورد التراكمي section if checked
             if (document.getElementById('include-cumulative').checked) {
                 output += `☂️ ورد التراكمي:\n`;
+                output += `\tصفحات التراكمي : ${document.getElementById('cumulative-pages').value || "غير محددة"}\n`;
                 output += `\tمدة التسجيل: ${document.getElementById('cumulative-duration').value || "غير محددة"}\n`;
                 output += `\tالتكرار: ${document.getElementById('cumulative-repetition').value || "0"}\n`;
                 output += `\tعدد الأخطاء: ${document.getElementById('cumulative-errors').value || "0"}\n`;
@@ -552,7 +557,7 @@
             // Include ورد التسميع section
             output += `☂️ ورد التسميع:\n`;
             output += `\tمدة التسميع: ${document.getElementById('tasmi3-duration').value || "غير محددة"}\n`;
-            output += `\tتم السماع لـ: ${document.getElementById('tasmi3-person').value || "غير محدد"}\n`;
+            output += `\tتم التسميع ${document.getElementById('tasmi3-person').value || "غير محدد"}\n`;
             const cumulativeTotals = {};
 
             // Loop through each Juz and include details for all surahs
@@ -599,7 +604,7 @@
                 const totals = cumulativeTotals[juz];
                 const firstSurah = surahs.find(surah => surah.juz === juz);
                 // Always show statistics, even if they are zero
-                output += `\n${juz}: حزب ${firstSurah.name}:\n`;
+                output += `\n حزب ${firstSurah.name}:\n`;
                 output += `\tعدد الأخطاء: ${totals.mistakes || 0}\n`;
                 output += `\tعدد الترددات: ${totals.frequencies || 0}\n`;
             });
@@ -625,7 +630,7 @@
             output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked')?.value || "غير محدد"}\n`;
             output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked')?.value || "غير محدد"}\n`;
             output += `\n`;
-            output += `\tالحمد لله الذي يسر واعان 🥰\n`;
+            output += `\tالحمد لله الذي يسر وأعان 🥰\n`;
 
             // Display the report in the textarea
             const copyField = document.getElementById('copy-field');
@@ -637,11 +642,26 @@
             const copyField = document.getElementById('copy-field');
             copyField.select();
             document.execCommand('copy');
-            alert('تم نسخ التقرير إلى الحافظة!');
+            alert('تم نسخ التقرير! رزقكم الله الختم القريب! 💚');
         }
+        /*viisssssssssit to see if i should update it or not */
+        const namespace = 'eyarais.github.io'; // Your domain or a unique name
+        const key = 'home-page'; // Any unique identifier for the page
+
+        // Track visitor count (increment on page load)
+        fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Visitor Count:', data.value); // Log the count in the console
+            })
+            .catch(error => {
+                console.error('Error fetching visitor count:', error);
+            });
+
         // Handle button click
         async function handleButtonClick() {
             await generateReport(); // Wait for report generation to complete
+
             copyToClipboard(); // Copy to clipboard after completion
         }
 
