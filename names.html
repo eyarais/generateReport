@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متابعة إنجاز الورد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #000;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        .status-green {
+            color: green;
+        }
+
+        .status-red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>متابعة إنجاز الورد في عطاء</h1>
+
+    <label for="students-input">أدخل أسماء الطلاب الذين أتموا الورد<b style="color:red"> (كل اسم في سطر ضروووري ):</b>
+    </label><br>
+    <textarea id="students-input" rows="10" cols="30"></textarea><br><br>
+
+    <button onclick="checkHomeworkStatus()">التحقق </button>
+
+    <p id="entered-count"></p>
+    <p id="completed-count"></p>
+    <p id="not-completed-count"></p>
+    <p id="unmatched-names" style="color: red;"></p>
+
+    <h2>الطلاب والورد</h2>
+    <table id="students-table">
+        <thead>
+            <tr>
+                <th>اسم الطالبة</th>
+                <th>حالة الورد</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <br><br>
+    <button onclick="copyColumn(0)">نسخ الأسماء فقط</button>
+    <button onclick="copyColumn(1)">نسخ الحالات فقط</button>
+    <button onclick="copyTable()">نسخ الجدول بالكامل</button>
+
+    <script>
+        // List of all students (normalized names)
+        const studentsTable = [
+            "فضيلة", "سيرين", "اسماء", "تيسير", "ام ريحان", "عبير", "اميره",
+            "اميمة", "ريم", "جيهان", "رفيقة", "شامة", "فاطمة", "نسرين", "يسرى", "امال",
+            "منى", "اية"
+        ].map(normalizeString); // Normalize table names once at the start
+
+        function checkHomeworkStatus() {
+            const inputText = document.getElementById('students-input').value.trim();
+            const finishedStudents = cleanInput(inputText); // Clean and normalize input names
+
+            // Display the count of entered names
+            const enteredCount = finishedStudents.length;
+            document.getElementById('entered-count').textContent = `عدد الطلاب الذين أدخلتهم في القائمة: ${enteredCount}`;
+
+            let completedCount = 0;
+            let notCompletedCount = 0;
+            const unmatchedNames = [];
+
+            const tableBody = document.getElementById('students-table').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = "";
+
+            studentsTable.forEach(student => {
+                const status = finishedStudents.includes(student) ? "✅" : "❌";
+                const statusClass = status === "✅" ? "status-green" : "status-red";
+
+                const row = tableBody.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+
+                cell1.textContent = student;
+                cell2.textContent = status;
+                cell2.classList.add(statusClass);
+
+                if (status === "✅") {
+                    completedCount++;
+                } else {
+                    notCompletedCount++;
+                }
+            });
+
+            // Find unmatched names
+            finishedStudents.forEach(name => {
+                if (!studentsTable.includes(name)) {
+                    unmatchedNames.push(name);
+                }
+            });
+
+            document.getElementById('completed-count').textContent = `عدد الطالبات الذين قاموا بإنجاز الورد: ${completedCount}`;
+            document.getElementById('not-completed-count').textContent = `عدد الطالبات الذين لم يقوموا الورد : ${notCompletedCount}`;
+            document.getElementById('unmatched-names').textContent =
+                unmatchedNames.length > 0
+                    ? `الأسماء غير الموجودة في الجدول: ${unmatchedNames.join(', ')}`
+                    : '';
+        }
+
+        function cleanInput(inputText) {
+            return inputText.split('\n')
+                .map(name => name.trim())
+                .filter(name => name !== "")
+                .map(normalizeString);
+        }
+
+        function normalizeString(name) {
+            return name
+                .replace(/[اأإآ]/g, 'ا') // Normalize all forms of 'ا'
+                .replace(/[ى]/g, 'ي') // Normalize 'ى' to 'ي'
+                .replace(/[\s]+/g, ' ') // Normalize multiple spaces to a single space
+                .replace(/[\u200B-\u200D\uFEFF]/g, '')
+                .trim(); // Remove leading/trailing spaces
+        }
+
+        function copyColumn(columnIndex) {
+            let resultsText = "";
+            const rows = document.getElementById('students-table').getElementsByTagName('tbody')[0].rows;
+            for (let row of rows) {
+                resultsText += row.cells[columnIndex].textContent.trim() + "\n"; // Separate rows by newline
+            }
+
+            copyToClipboard(resultsText);
+            alert("5edmaaaaa mezyena kifek  !");
+        }
+
+        function copyTable() {
+            let resultsText = "";
+            const rows = document.getElementById('students-table').getElementsByTagName('tbody')[0].rows;
+
+            // Loop through each row in the table
+            for (let row of rows) {
+                const studentName = row.cells[0].textContent.trim();
+                const status = row.cells[1].textContent.trim();
+
+                // Use tab to separate columns and newline to separate rows
+                resultsText += `${studentName}\t${status}\n`;
+            }
+
+            copyToClipboard(resultsText); // Copy the formatted text to clipboard
+            alert("heeeeeeey waaalah coooopieeeeed ");
+        }
+
+        function copyToClipboard(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text.trim(); // Remove any trailing newlines
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+        }
+
+        function copyToClipboard(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text.trim();
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+        }
+
+        /*   function copyTable() {
+               let resultsText = "";
+               const rows = document.getElementById('students-table').getElementsByTagName('tbody')[0].rows;
+               for (let row of rows) {
+                   const studentName = row.cells[0].textContent.trim();
+                   const status = row.cells[1].textContent.trim();
+                   resultsText += studentName + " : " + status + "\n";
+               }
+   
+               copyToClipboard(resultsText);
+               alert("تم نسخ الجدول بالكامل!");
+           }*/
+
+        function copyToClipboard(text) {
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = text.trim();
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+        }
+    </script>
+
+</body>
+
+</html>
