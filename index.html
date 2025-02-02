@@ -170,9 +170,8 @@
         <h2>☂️ ورد الغيبي</h2>
         <label> الجزء الغيبي:</label>
         <!-- Create a select dropdown for Juz values -->
-        <select id="juz-select">
-            <option value="">اختر رقم الجزء</option> <!-- Default option -->
-        </select>
+        <label>الأحزاب: <input type="text" id="ghaybi-name"
+                placeholder=" معليش تعبناكم اما اكتبوا بيدكم عادي لين يجي تحديث ههههه"></label>
 
         <br>
         <label>مدة التسجيل: <input type="text" id="ghaybi-duration" placeholder="ساعات ودقائق"></label>
@@ -319,7 +318,7 @@
 
         // Function to extract unique 'juz' values and populate the select dropdown with the first Surah of each Juz
         function populateJuzDropdown() {
-            const juzSelect = document.getElementById("juz-select");
+            // const juzSelect = document.getElementById("juz-select");
 
             // Extract unique 'juz' values
             const uniqueJuz = [...new Set(surahs.map(item => item.juz))];
@@ -330,7 +329,7 @@
                 const option = document.createElement("option");
                 option.value = `${juz}: حزب ${firstSurah.name}`;
                 option.textContent = `${juz}: حزب ${firstSurah.name}`;
-                juzSelect.appendChild(option);
+                // juzSelect.appendChild(option);
             });
         }
         populateJuzDropdown();
@@ -598,9 +597,10 @@
                 output += `\tعدد الأخطاء: ${document.getElementById('cumulative-errors').value || "0"}\n`;
                 output += `\tعدد الترددات: ${document.getElementById('cumulative-frequency').value || "0"}\n\n`;
             }
-            const selectedOption = document.getElementById("juz-select").value;
+            //const selectedOption = document.getElementById("juz-select").value;
             output += `☂️ ورد الغيبي:\n`;
-            output += `\t${selectedOption}\n`;
+            // output += `\t${selectedOption}\n`;
+            output += `\tالأحزاب:  ${document.getElementById('ghaybi-name').value}\n`;
             output += `\tمدة التسجيل: ${document.getElementById('ghaybi-duration').value}\n`;
             output += `\tعدد الأخطاء: ${document.getElementById('ghaybi-errors').value}\n`;
 
