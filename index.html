@@ -689,19 +689,19 @@
             output += `\n`;
             // Include المهام الأخرى section
             output += `\n💎 المهام الأخرى:\n`;
-            output += `\tورد الختمة الشهرية: ${document.querySelector('input[name="monthly-completion"]:checked')?.value || "غير محدد"}\n`;
-            output += `\tالتحضير القبلي: ${document.querySelector('input[name="preparation"]:checked')?.value || "غير محدد"}\n`;
-            // Check if Motchebeh is visible before including it in the output
+
+            output += `\tورد الختمة الشهرية: ${getStatus("monthly-completion")}\n`;
+            output += `\tالتحضير القبلي: ${getStatus("preparation")}\n`;
+
             if (document.querySelector('input[name="motchebeh"]').parentElement.style.display !== "none") {
-                output += `\tالمتشابهات: ${document.querySelector('input[name="motchebeh"]:checked')?.value || "غير محدد"}\n`;
+                output += `\tالمتشابهات: ${getStatus("motchebeh")}\n`;
             }
-            if (document.querySelector('input[name="tafseer"]').parentElement.style.display !== "none") {
-                output += `\tورد التفسير: ${document.querySelector('input[name="tafseer"]:checked')?.value || "غير محدد"}\n`;
+            if (document.querySelector('input[name="tafseer"]')?.parentElement?.style.display !== "none") {
+                output += `\tورد التفسير: ${getStatus("tafseer")}\n`;
             }
 
-
-            output += `\tورد الأذكار: ${document.querySelector('input[name="athkar"]:checked')?.value || "غير محدد"}\n`;
-            output += `\tورد المحراب: ${document.querySelector('input[name="mihrab"]:checked')?.value || "غير محدد"}\n`;
+            output += `\tورد الأذكار: ${getStatus("athkar")}\n`;
+            output += `\tورد المحراب: ${getStatus("mihrab")}\n`;
             output += `\n`;
             output += `\tالحمد لله الذي يسر وأعان 🥰\n`;
 
@@ -710,7 +710,12 @@
             copyField.value = output;
             document.getElementById('output').classList.remove('hidden');
         }
+        let output = "";
 
+        function getStatus(name) {
+            let value = document.querySelector(`input[name="${name}"]:checked`)?.value || "غير محدد";
+            return value === "تم" ? "✅" : value === "لم يتم" ? "❌" : value;
+        }
         function copyToClipboard() {
             const copyField = document.getElementById('copy-field');
             copyField.select();
