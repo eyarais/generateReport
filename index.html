@@ -237,7 +237,10 @@
 
     </div><button onclick="handleButtonClick()">إنشاء التقرير ونسخه</button>
     <div id="output" class="output hidden"><textarea id="copy-field" readonly></textarea></div>
-
+    <div id="output">
+        <label> test- ضروري يصير انشاء قبل </label>
+        <button onclick="shareToWhatsApp()">Share to WhatsApp</button>
+    </div>
     <script>
         // Function to toggle visibility based on the checkbox state
         document.getElementById("include-hifz").addEventListener("change", function () {
@@ -708,6 +711,7 @@
             // Display the report in the textarea
             const copyField = document.getElementById('copy-field');
             copyField.value = output;
+            window.reportOutput = output;
             document.getElementById('output').classList.remove('hidden');
         }
         let output = "";
@@ -722,10 +726,14 @@
             document.execCommand('copy');
             alert('تم نسخ التقرير! رزقكم الله الختم القريب! 💚');
         }
-        /*viisssssssssit to see if i should update it or not */
 
-
-
+        // Function to share to WhatsApp
+        function shareToWhatsApp() {
+            // Log before sharing to check the value
+            console.log('Sharing to WhatsApp:', window.reportOutput);
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(window.reportOutput)}`;
+            window.open(whatsappLink, '_blank');
+        }
 
         // Handle button click
         async function handleButtonClick() {
