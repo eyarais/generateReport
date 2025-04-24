@@ -4,7 +4,7 @@ body {
   text-align: right;
   margin: 20px;
   background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-  background-image: url("img/whale5.jpg");
+  background-image: url("img/whale5.png");
   background-blend-mode: overlay;
   background-repeat: repeat; /* Makes the image repeat */
   background-size: 400px 400px; /* Adjusts the size of the image */
