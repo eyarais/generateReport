@@ -621,149 +621,97 @@
                 toggleSurahDetails(checkbox.value, true);
             });
         }
-        async function generateReport() {
-            const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
+async function generateReport() {
 
-            let output = `🌸 تقرير يوم ${dayName} 🌸\n\n`;
+    const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
 
-            // Track processed surahs to avoid duplication
-            const processedSurahs = new Set();
+    let output = `💌التقرير اليومي 💌\n\n`;
+    output += `🌱 ليوم ${dayName} 🌱\n\n`;
+    output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
 
-            // Initialize an object to store cumulative totals for mistakes and frequencies per Juz
+    /* ======================
+        🌹 ورد الحفظ
+    ======================= */
 
+    if (document.getElementById('include-hifz').checked) {
 
-            // Include ورد الحفظ section if checked
-            if (document.getElementById('include-hifz').checked) {
-                output += `☂️ ورد الحفظ:\n`;
-                output += `\tاسم السورة: ${document.getElementById('hifz-surah').value || "غير محدد"}\n`;
-                output += `\tمدة التسجيل: ${document.getElementById('hifz-duration').value || "غير محددة"}\n`;
-                output += `\tعدد التكرار: ${document.getElementById('hifz-repetition').value || "0"}\n`;
-                output += `\tعدد الأخطاء: ${document.getElementById('hifz-errors').value || "0"}\n`;
-                output += `\tعدد الترددات: ${document.getElementById('hifz-frequency').value || "0"}\n\n`;
-            }
+        output += `🌹ورد الحفظ 🌹\n`;
 
-            // Include ورد التراكمي section if checked
-            if (document.getElementById('include-cumulative').checked) {
-                output += `☂️ ورد التراكمي:\n`;
-                output += `\tصفحات التراكمي : ${document.getElementById('cumulative-pages').value || "غير محددة"}\n`;
-                output += `\tمدة التسجيل: ${document.getElementById('cumulative-duration').value || "غير محددة"}\n`;
-                output += `\tالتكرار: ${document.getElementById('cumulative-repetition').value || "0"}\n`;
-                output += `\tعدد الأخطاء: ${document.getElementById('cumulative-errors').value || "0"}\n`;
-                output += `\tعدد الترددات: ${document.getElementById('cumulative-frequency').value || "0"}\n\n`;
-            }
-            //const selectedOption = document.getElementById("juz-select").value;
-            output += `☂️ ورد الغيبي:\n`;
-            // output += `\t${selectedOption}\n`;
-            output += `\tالأحزاب:  ${document.getElementById('ghaybi-name').value}\n`;
-            output += `\tمدة التسجيل: ${document.getElementById('ghaybi-duration').value}\n`;
-            output += `\tعدد الأخطاء: ${document.getElementById('ghaybi-errors').value}\n`;
+        output += `الوجه عدد: ${document.getElementById('hifz-surah').value || "غير محدد"}\n`;
+        output += `\nالمدة: ${document.getElementById('hifz-duration').value || "0"}\n`;
+        output += `عدد الأخطاء : ${document.getElementById('hifz-errors').value || 0}\n`;
+        output += `عدد الترددات: ${document.getElementById('hifz-frequency').value || 0}\n\n`;
+        output += `عدد التكرار : *${document.getElementById('hifz-repetition').value || 0}*\n\n`;
+        output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n\n`;
+    }
 
-            // Check if the "اسم السورة" for الأخطاء should be included
-            if (document.getElementById('ghaybi-errors').value > 0) {
-                output += `\tاسم السورالتي فيها أخطاء: ${document.getElementById('ghaybi-errors-surah').value}\n`;
-            }
+    /* ======================
+        🌷 ورد التراكمي
+    ======================= */
 
-            output += `\tعدد الترددات: ${document.getElementById('ghaybi-frequency').value}\n`;
+    if (document.getElementById('include-cumulative').checked) {
 
-            // Check if the "اسم السورة" for الترددات should be included
-            if (document.getElementById('ghaybi-frequency').value > 0) {
-                output += `\tاسم السورة بالترددات: ${document.getElementById('ghaybi-frequency-surah').value}\n`;
-            }
+        output += `ورد التراكمي 🌷: ${document.getElementById('cumulative-pages').value || ""}\n`;
+        output += `المدة: ${document.getElementById('cumulative-duration').value || "0"}\n`;
+        output += `عدد التكرار: ${document.getElementById('cumulative-repetition').value || 0}\n`;
+        output += `عدد الأخطاء: ${document.getElementById('cumulative-errors').value || 0}\n`;
+        output += `عدد الترددات: ${document.getElementById('cumulative-frequency').value || 0}\n`;
+        output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
+    }
 
-            output += `\n`;
+    /* ======================
+        🌷 ورد التسميع
+    ======================= */
 
-            // Include ورد التسميع section
-            output += `☂️ ورد التسميع:\n`;
-            output += `\tمدة التسميع: ${document.getElementById('tasmi3-duration').value || "غير محددة"}\n`;
-            output += `\tتم التسميع ${document.getElementById('tasmi3-person').value || "غير محدد"}\n`;
-            output += `❤ السور التي بها ترددات\n`;
-            const cumulativeTotals = {};
+    output += `ورد التسميع:\n`;
 
+    document.querySelectorAll('#selected-details > div').forEach(div => {
 
-            Object.keys(groupedSurahs).forEach((juz) => {
-                const surahsInJuz = groupedSurahs[juz];
-                let totalMistakes = 0;
-                let totalFrequencies = 0;
+        const surahName = div.querySelector('h4')?.innerText.replace(":", "");
+        if (!surahName) return;
 
-                surahsInJuz.forEach((surahName) => {
-                    // Check if the surah has already been processed
-                    if (!processedSurahs.has(surahName)) {
-                        const detailDiv = document.getElementById(`detail-${surahName}`);
-                        if (detailDiv) {
-                            const mistakes = parseInt(detailDiv.querySelector('.errors').value) || 0;
-                            const frequencies = parseInt(detailDiv.querySelector('.frequencies').value) || 0;
-                            if (mistakes > 0 || frequencies > 0) {
-                                // Include full details (mistakes & frequencies) for Juz 59 & 60
-                                output += `\t 💙 ${surahName} :\n`;
-                                output += `\t\tعدد الأخطاء: ${mistakes}\n`;
-                                output += `\t\tعدد الترددات: ${frequencies}\n\n`;
-                            }
+        const errors = div.querySelector('.errors')?.value || 0;
+        const freq = div.querySelector('.frequencies')?.value || 0;
+        const duration = document.getElementById(`duration-${surahName}`)?.value || "0";
 
-                            // Add Surah details to the report
-                            /*  if (juz === "حزب 60" || juz === "حزب 59") {
-                                  // Include full details (mistakes & frequencies) for Juz 59 & 60
-                                  output += `\t💚 ${surahName} :\n`;
-                                  output += `\t\tعدد الأخطاء: ${mistakes}\n`;
-                                  output += `\t\tعدد الترددات: ${frequencies}\n\n`;
-                              }*/
-                            // Update cumulative totals for this Juz
-                            totalMistakes += mistakes;
-                            totalFrequencies += frequencies;
-                            cumulativeTotals[juz] = {
-                                mistakes: totalMistakes,
-                                frequencies: totalFrequencies,
-                            };
-                            // Mark this surah as processed
-                            processedSurahs.add(surahName);
-                        }
-                    }
-                });
+        output += `🌷${surahName}\n`;
+        output += `المدة: ${duration}دق\n`;
+        output += `عدد الترددات: ${freq}\n`;
+        output += `عدد الأخطاء: ${errors}\n`;
+    });
 
-            });
+    output += `\n🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
 
+    /* ======================
+        🌷 ورد الغيبي
+    ======================= */
 
-            // Includ
-            // e cumulative totals per Juz
+    output += `ورد الغيبي: ✅\n\n`;
 
-            output += `\n📝 إجمالي الأخطاء والترددات حسب الحزب:\n`;
+    /* ======================
+        📘 المهام
+    ======================= */
 
-            Object.keys(cumulativeTotals).forEach((juz) => {
-                const totals = cumulativeTotals[juz];
-                const firstSurah = surahs.find(surah => surah.juz === juz);
-                // Always show statistics, even if they are zero
-                output += `\n حزب ${firstSurah.name}:\n`;
-                output += `\tعدد الأخطاء: ${totals.mistakes || 0}\n`;
-                output += `\tعدد الترددات: ${totals.frequencies || 0}\n`;
-            });
+    output += `🎧 التّحضيرُ القبلي 🎧 : ${getStatus("preparation")}\n\n`;
 
-            // If no data exists in cumulativeTotals, still show "0" for every Juz
-            if (Object.keys(cumulativeTotals).length === 0) {
-                output += `\t لا توجد أجزاء مسجلة بأخطاء أو ترددات في التسميع 🥰`;
-            }
-            output += `\n`;
-            // Include المهام الأخرى section
-            output += `\n💎 المهام الأخرى:\n`;
+    output += `🌸🌿🌸🌿🌸🌿🌼🌸🌿🌸🌿🌸🌿\n\n`;
 
-            output += `\tورد الختمة الشهرية: ${getStatus("monthly-completion")}\n`;
-            output += `\tالتحضير القبلي: ${getStatus("preparation")}\n`;
+    output += `📚سماع أو قراءة تفسير 📚: ${getStatus("tafseer")}\n`;
+    output += `🕌ورد المحراب🕌: ${getStatus("mihrab")}\n`;
+    output += `📑ورد المتشابهات 📑: ${getStatus("motchebeh")}\n`;
+    output += `🌧️ورد الختمة🌧️ : ${getStatus("monthly-completion")}\n`;
 
-            if (document.querySelector('input[name="motchebeh"]').parentElement.style.display !== "none") {
-                output += `\tالمتشابهات: ${getStatus("motchebeh")}\n`;
-            }
-            if (document.querySelector('input[name="tafseer"]')?.parentElement?.style.display !== "none") {
-                output += `\tورد التفسير: ${getStatus("tafseer")}\n`;
-            }
+    output += `🌿🌸🌿🌸🌼🌸🌿🌸🌿🌸\n\n`;
 
-            output += `\tورد الأذكار: ${getStatus("athkar")}\n`;
-            output += `\tورد المحراب: ${getStatus("mihrab")}\n`;
-            output += `\n`;
-            output += `\tالحمد لله الذي يسر وأعان 🥰\n`;
+    output += `🌺 إتمامُ أذكارِ الصباح والمساء،\n`;
+    output += `والإكثارُ مِن الدُّعاء الصالحات  والتسبيح🌺\n\n`;
 
-            // Display the report in the textarea
-            const copyField = document.getElementById('copy-field');
-            copyField.value = output;
-            window.reportOutput = output;
-            document.getElementById('output').classList.remove('hidden');
+    output += `☝🏻اللهم أعنا ولا تعن علينا ☝🏻\n\n`;
+    output += `💞والحمدُ للهِ الذي بنعمتِه تَتِمُّ الصالحات`;
+
+    document.getElementById('copy-field').value = output;
+    window.reportOutput = output;
+    document.getElementById('output').classList.remove('hidden');
         }
         let output = "";
 
@@ -856,4 +804,5 @@ function stopTimer(surah) {
 
 
 </html>
+
 
