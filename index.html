@@ -569,18 +569,43 @@
                     const detailDiv = document.createElement("div");
                     detailDiv.id = `detail-${surahName}`;
                     detailDiv.dataset.juz = juz;
-                    detailDiv.innerHTML = `
-                 <h4>${surahName}:</h4>
-                <label>عدد الأخطاء:</label>
-                <button type="button" class="small-button" onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
-                <input type="number" class="errors small-input" id="errors-${surahName}" data-surah="${surahName}" value="0" min="0">
-                <button type="button" class="small-button" onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
-                <br>
-                <label>عدد الترددات:</label>
-                <button type="button" class="small-button" onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
-                <input type="number" class="frequencies small-input" id="frequencies-${surahName}" data-surah="${surahName}" value="0">
-                <button type="button" class="small-button" onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
-            `;
+                  detailDiv.innerHTML = `
+    <h4>${surahName}:</h4>
+
+    <label>مدة التسميع:</label>
+    <input type="text"
+           id="duration-${surahName}"
+           readonly
+           placeholder="00:00"
+           style="width:90px">
+
+    <button onclick="startTimer('${surahName}')">▶️</button>
+    <button onclick="stopTimer('${surahName}')">⏸</button>
+
+    <br><br>
+
+    <label>عدد الأخطاء:</label>
+    <button type="button" class="small-button"
+        onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
+
+    <input type="number" class="errors small-input"
+        id="errors-${surahName}" value="0">
+
+    <button type="button" class="small-button"
+        onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
+
+    <br>
+
+    <label>عدد الترددات:</label>
+    <button type="button" class="small-button"
+        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
+
+    <input type="number" class="frequencies small-input"
+        id="frequencies-${surahName}" value="0">
+
+    <button type="button" class="small-button"
+        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
+`;
                     selectedDetailsDiv.appendChild(detailDiv);
                 }
             } else {
@@ -796,7 +821,29 @@
             }
         }
 
+const timers = {};
+const timerIntervals = {};
 
+function startTimer(surah) {
+    if (!timers[surah]) timers[surah] = 0;
+
+    if (timerIntervals[surah]) return;
+
+    timerIntervals[surah] = setInterval(() => {
+        timers[surah]++;
+
+        const minutes = Math.floor(timers[surah] / 60);
+        const seconds = timers[surah] % 60;
+
+        document.getElementById(`duration-${surah}`).value =
+            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }, 1000);
+}
+
+function stopTimer(surah) {
+    clearInterval(timerIntervals[surah]);
+    timerIntervals[surah] = null;
+        }
 
     </script>
 
@@ -809,3 +856,4 @@
 
 
 </html>
+
