@@ -387,7 +387,12 @@ let activeInterval = null;
                 const partHeader = document.createElement("div");
                 partHeader.className = "part-header";
                 partHeader.innerHTML = `
-                <input type="checkbox" id="juz-${i}" ${i === 60 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
+             <input
+  type="checkbox"
+  id="juz-${i}"
+  onchange="toggleJuzSelection(${i}, '${juz}', this.checked)"
+/>
+
                 <label for="juz-${i}">${juz} : حزب ${firstSurah.name}</label>
                 <button class="expand-btn" onclick="toggleDropdown(${i})">⬇️</button>
             `;
@@ -410,7 +415,6 @@ let activeInterval = null;
                     suraCheckbox.type = "checkbox";
                     suraCheckbox.id = `sura-${i}-${suraIndex}`;
                     suraCheckbox.value = sura;  // Ensure the sura name is properly set
-                    suraCheckbox.checked = i === 60; // Check by default for Juz 1 and Juz 2
                     suraCheckbox.onclick = () => toggleSurahDetails(sura, suraCheckbox.checked, i); // Pass Juz number
 
                     const suraLabel = document.createElement("label");
@@ -728,15 +732,12 @@ function stopTimer() {
     activeTimer = null;
 }
 
-    <footer>
-        <footer>
-            <p>© 2025 برمجة الطويلبة <strong>آية الرايس </strong>غفر الله لها.</p>
-        </footer>
-    </footer>
+
 </body>
 
 
 </html>
+
 
 
 
