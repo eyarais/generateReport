@@ -163,23 +163,52 @@
     </div>
     <div class="section" id="hifz-section">
         <h2>☂️ ورد الحفظ</h2><label>اسم السورة: <input type="text" id="hifz-surah"
-                placeholder="اكتب اسم السورة"></label><input type="text" id="hifz-duration" readonly placeholder="00:00">
-<button onclick="startTimer('hifz-duration')">▶️</button>
-<button onclick="stopTimer()">⏸</button>
-<label>عدد التكرار: <input type="number" id="hifz-repetition"
+                placeholder="اكتب اسم السورة"></label><label>مدة التسجيل: <input type="text" id="hifz-duration"
+                placeholder="ساعات ودقائق"></label><label>عدد التكرار: <input type="number" id="hifz-repetition"
                 value="10"></label><label>عدد الأخطاء: <input type="number" id="hifz-errors"
                 value="0"></label><label>عدد الترددات: <input type="number" id="hifz-frequency" value="0"></label>
     </div>
     <div class="section" id="cumulative-section">
         <h2>☂️ ورد التراكمي</h2>
         <label>صفحات التراكمي: <input type="text" id="cumulative-pages" placeholder="أوجه التراكمي"></label>
-        <label>مدة التسجيل: <input type="text" id="cumulative-duration" readonly placeholder="00:00">
-<button onclick="startTimer('cumulative-duration')">▶️</button>
-<button onclick="stopTimer()">⏸</button>
-</label><label>التكرار: <input type="number" id="cumulative-repetition"
+        <label>مدة التسجيل: <input type="text" id="cumulative-duration"
+                placeholder="ساعات ودقائق"></label><label>التكرار: <input type="number" id="cumulative-repetition"
                 value="10"></label><label>عدد الأخطاء: <input type="number" id="cumulative-errors"
                 value="0"></label><label>عدد الترددات: <input type="number" id="cumulative-frequency" value="0"></label>
     </div>
+    <div class="section" id="ghaybi-section">
+        <h2>☂️ ورد الغيبي</h2>
+        <!-- Create a select dropdown for Juz values -->
+        <label>الأحزاب: <input type="text" id="ghaybi-name" placeholder=" احزاب الغيبي"></label>
+
+        <br>
+        <label>مدة التسجيل: <input type="text" id="ghaybi-duration" placeholder="ساعات ودقائق"></label>
+
+        <!-- Number of mistakes with increment and decrement buttons -->
+        <label>عدد الأخطاء:</label>
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-errors', 'errors', 'decrement')">-</button>
+        <input type="number" class="errors small-input" id="ghaybi-errors" value="0" data-surah="ghaybi-errors" min="0">
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-errors', 'errors', 'increment')">+</button>
+
+        <br>
+        <label id="errors-surah-label" style="display: none;">اسم السورة : <input type="text"
+                id="ghaybi-errors-surah"></label>
+
+        <!-- Number of frequencies with increment and decrement buttons -->
+        <label>عدد الترددات:</label>
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-frequency', 'frequencies', 'decrement')">-</button>
+        <input type="number" class="frequencies small-input" id="ghaybi-frequency" value="0"
+            data-surah="ghaybi-frequency">
+        <button type="button" class="small-button"
+            onclick="changeValue('ghaybi-frequency', 'frequencies', 'increment')">+</button>
+        <br>
+        <label id="frequency-surah-label" style="display: none;">اسم السورة : <input type="text"
+                id="ghaybi-frequency-surah"></label>
+    </div>
+
     <div class="section">
         <h2>☂️ ورد التسميع</h2><label>مدة التسميع: <input type="text" id="tasmi3-duration"
                 placeholder="ساعات ودقائق"></label><label>تم التسميع : <input type="text" id="tasmi3-person"
@@ -213,9 +242,6 @@
         <button onclick="shareToWhatsApp()">أرسله في الواتساب</button>
     </div>
     <script>
-        let activeTimer = null;
-let activeInterval = null;
-
         // Function to toggle visibility based on the checkbox state
         document.getElementById("include-hifz").addEventListener("change", function () {
             var hifzChecked = this.checked;
@@ -318,7 +344,6 @@ let activeInterval = null;
         { name: "سورة الفلق", juz: "حزب 60" },
         { name: "سورة الناس", juz: "حزب 60" }
         ];
-
 
         // Function to extract unique 'juz' values and populate the select dropdown with the first Surah of each Juz
         function populateJuzDropdown() {
@@ -534,80 +559,68 @@ let activeInterval = null;
         }
 
         // Function to toggle Surah details
-function toggleSurahDetails(surahName, showDetails, juz = "غير محدد") {
+        function toggleSurahDetails(surahName, showDetails, juz = "غير محدد") {
+            if (!surahName || surahName === "on") return;
+            const selectedDetailsDiv = document.getElementById("selected-details");
+            const existingDetail = document.getElementById(`detail-${surahName}`);
 
-    if (!surahName || surahName === "on") return;
+            if (showDetails) {
+                if (!existingDetail) {
+                    const detailDiv = document.createElement("div");
+                    detailDiv.id = `detail-${surahName}`;
+                    detailDiv.dataset.juz = juz;
+                  detailDiv.innerHTML = `
+    <h4>${surahName}:</h4>
 
-    const selectedDetailsDiv = document.getElementById("selected-details");
-    const existingDetail = document.getElementById(`detail-${surahName}`);
+    <label>مدة التسميع:</label>
+    <input type="text"
+           id="duration-${surahName}"
+           readonly
+           placeholder="00:00"
+           style="width:90px">
 
-    if (showDetails) {
+    <button onclick="startTimer('${surahName}')">▶️</button>
+    <button onclick="stopTimer('${surahName}')">⏸</button>
 
-        if (!existingDetail) {
+    <br><br>
 
-            const detailDiv = document.createElement("div");
-            detailDiv.id = `detail-${surahName}`;
-            detailDiv.dataset.juz = juz;
+    <label>عدد الأخطاء:</label>
+    <button type="button" class="small-button"
+        onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
 
-            detailDiv.innerHTML = `
-                <h4>${surahName}:</h4>
+    <input type="number" class="errors small-input"
+        id="errors-${surahName}" value="0">
 
-                <label style="margin-bottom:6px; display:block;">
-                    <input type="checkbox" id="ghaybi-${surahName}">
-                    غيبي
-                </label>
+    <button type="button" class="small-button"
+        onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
 
-                <label>مدة التسميع:</label>
-                <input type="text"
-                       id="duration-${surahName}"
-                       readonly
-                       placeholder="00:00"
-                       style="width:90px">
+    <br>
 
-                <button onclick="startTimer('duration-${surahName}')">▶️</button>
-                <button onclick="stopTimer()">⏸</button>
+    <label>عدد الترددات:</label>
+    <button type="button" class="small-button"
+        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
 
-                <br><br>
+    <input type="number" class="frequencies small-input"
+        id="frequencies-${surahName}" value="0">
 
-                <label>عدد الأخطاء:</label>
-                <button type="button" class="small-button"
-                    onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
-
-                <input type="number"
-                       class="errors small-input"
-                       id="errors-${surahName}"
-                       value="0">
-
-                <button type="button" class="small-button"
-                    onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
-
-                <br>
-
-                <label>عدد الترددات:</label>
-                <button type="button" class="small-button"
-                    onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
-
-                <input type="number"
-                       class="frequencies small-input"
-                       id="frequencies-${surahName}"
-                       value="0">
-
-                <button type="button" class="small-button"
-                    onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
-
-                <hr>
-            `;
-
-            selectedDetailsDiv.appendChild(detailDiv);
+    <button type="button" class="small-button"
+        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
+`;
+                    selectedDetailsDiv.appendChild(detailDiv);
+                }
+            } else {
+                if (existingDetail) {
+                    existingDetail.remove();
+                }
+            }
         }
 
-    } else {
-        if (existingDetail) {
-            existingDetail.remove();
+        // Call displaySurahDetails for default checked Surahs on page load
+        window.onload = function () {
+            document.querySelectorAll("input[type=checkbox]:checked").forEach((checkbox) => {
+                toggleSurahDetails(checkbox.value, true);
+            });
         }
-    }
-}
-
 async function generateReport() {
 
     const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
@@ -649,51 +662,32 @@ async function generateReport() {
     /* ======================
         🌷 ورد التسميع
     ======================= */
-let tasmi3Text = "";
-let ghaybiText = "";
 
-document.querySelectorAll('#selected-details > div').forEach(div => {
+    output += `ورد التسميع:\n`;
 
-    const surahName = div.querySelector('h4')?.innerText.replace(":", "");
-    if (!surahName) return;
+    document.querySelectorAll('#selected-details > div').forEach(div => {
 
-    const duration = document.getElementById(`duration-${surahName}`)?.value || "00:00";
+        const surahName = div.querySelector('h4')?.innerText.replace(":", "");
+        if (!surahName) return;
 
-    // ❌ لو المدة صفر → لا تظهر نهائيًا
-    if (duration === "00:00" || duration === "0" || duration === "") return;
+        const errors = div.querySelector('.errors')?.value || 0;
+        const freq = div.querySelector('.frequencies')?.value || 0;
+        const duration = document.getElementById(`duration-${surahName}`)?.value || "0";
 
-    const errors = div.querySelector('.errors')?.value || 0;
-    const freq = div.querySelector('.frequencies')?.value || 0;
+        output += `🌷${surahName}\n`;
+        output += `المدة: ${duration}دق\n`;
+        output += `عدد الترددات: ${freq}\n`;
+        output += `عدد الأخطاء: ${errors}\n`;
+    });
 
-    const isGhaybi = document.getElementById(`ghaybi-${surahName}`)?.checked;
+    output += `\n🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
 
-    const block =
-`🌷${surahName}
-المدة: ${duration}
-عدد الترددات: ${freq}
-عدد الأخطاء: ${errors}
+    /* ======================
+        🌷 ورد الغيبي
+    ======================= */
 
-`;
+    output += `ورد الغيبي: ✅\n\n`;
 
-    if (isGhaybi) {
-        ghaybiText += block;
-    } else {
-        tasmi3Text += block;
-    }
-});
-if (tasmi3Text !== "") {
-    output += `🌷 ورد التسميع 🌷\n\n`;
-    output += tasmi3Text;
-    output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n\n`;
-}
-
-if (ghaybiText !== "") {
-    output += `🌙 ورد الغيبي 🌙\n\n`;
-    output += ghaybiText;
-    output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n\n`;
-}
-
-   
     /* ======================
         📘 المهام
     ======================= */
@@ -748,38 +742,58 @@ if (ghaybiText !== "") {
         }
 
 
-/*timer*/
+        /*
+                function toggleImage() {
+                    var imageContainer = document.getElementById('image-container');
+                    if (imageContainer.style.display === "none") {
+                        imageContainer.style.display = "block"; // Show the image
+                    } else {
+                        imageContainer.style.display = "none"; // Hide the image
+                    }
+                }*/// Open the modal
+        // Open the modal
+        function openModal() {
+            document.getElementById("imageModal").style.display = "block";
+        }
+
+        // Close the modal
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        // Close modal when clicking outside the image
+        window.onclick = function (event) {
+            var modal = document.getElementById("imageModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
 const timers = {};
 const timerIntervals = {};
-let activeTimer = null;
-let activeInterval = null;
-let secondsCount = 0;
 
-function startTimer(fieldId) {
-    if (activeInterval) {
-        clearInterval(activeInterval);
-        activeInterval = null;
-    }
+function startTimer(surah) {
+    if (!timers[surah]) timers[surah] = 0;
 
-    activeTimer = fieldId;
-    secondsCount = 0;
+    if (timerIntervals[surah]) return;
 
-    activeInterval = setInterval(() => {
-        secondsCount++;
+    timerIntervals[surah] = setInterval(() => {
+        timers[surah]++;
 
-        const minutes = Math.floor(secondsCount / 60);
-        const seconds = secondsCount % 60;
+        const minutes = Math.floor(timers[surah] / 60);
+        const seconds = timers[surah] % 60;
 
-        document.getElementById(fieldId).value =
+        document.getElementById(`duration-${surah}`).value =
             `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
     }, 1000);
 }
 
-function stopTimer() {
-    clearInterval(activeInterval);
-    activeInterval = null;
-    activeTimer = null;
-}
+function stopTimer(surah) {
+    clearInterval(timerIntervals[surah]);
+    timerIntervals[surah] = null;
+        }
+
+    </script>
 
     <footer>
         <footer>
@@ -790,6 +804,4 @@ function stopTimer() {
 
 
 </html>
-
-
 
