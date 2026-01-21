@@ -373,71 +373,61 @@ let activeInterval = null;
             return acc;
         }, {});
 
-        document.addEventListener("DOMContentLoaded", function () {
+        const partsContainer = document.getElementById("parts-container");
 
-    const partsContainer = document.getElementById("parts-container");
+        // Generate Juz dynamically from Juz 1 to Juz 30
+        for (let i = 1; i <= 60; i++) {
+            const juz = `حزب ${i}`;
 
-    // Group Surahs by Juz
-    const groupedSurahs = surahs.reduce((acc, surah) => {
-        if (!acc[surah.juz]) acc[surah.juz] = [];
-        acc[surah.juz].push(surah.name);
-        return acc;
-    }, {});
-
-    for (let i = 1; i <= 60; i++) {
-
-        const juz = `حزب ${i}`;
-
-        if (groupedSurahs[juz]) {
-
-            const partDiv = document.createElement("div");
-            partDiv.className = "part";
-
-            const firstSurah = surahs.find(s => s.juz === juz);
-
-            partDiv.innerHTML = `
-                <div class="part-header">
-                    <input type="checkbox"
-                        id="juz-${i}"
-                        onchange="toggleJuzSelection(${i}, '${juz}', this.checked)">
-                    
-                    <label for="juz-${i}">
-                        ${juz} : ${firstSurah.name}
-                    </label>
-
-                    <button class="expand-btn"
-                        onclick="toggleDropdown(${i})">⬇️</button>
-                </div>
-
-                <div class="suras-dropdown"
-                     id="suras-${i}"
-                     style="display:none"></div>
+            if (groupedSurahs[juz]) {
+                const partDiv = document.createElement("div");
+                partDiv.className = "part";
+                const firstSurah = surahs.find(surah => surah.juz === juz);
+                // Juz Header
+                const partHeader = document.createElement("div");
+                partHeader.className = "part-header";
+                partHeader.innerHTML = `
+                <input type="checkbox" id="juz-${i}" ${i === 60 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
+                <label for="juz-${i}">${juz} : حزب ${firstSurah.name}</label>
+                <button class="expand-btn" onclick="toggleDropdown(${i})">⬇️</button>
             `;
 
-            const surasDiv = partDiv.querySelector(`#suras-${i}`);
+                // Dropdown Container
+                const surasDiv = document.createElement("div");
+                surasDiv.className = "suras-dropdown";
+                surasDiv.id = `suras-${i}`;
+                surasDiv.style.display = "none";
 
-            groupedSurahs[juz].forEach((sura, index) => {
+                // Add Surah Checkboxes
+                groupedSurahs[juz].forEach((sura, suraIndex) => {
+                    // Skip Surahs with invalid names or empty values
+                    if (!sura || sura.trim() === "") return;
 
-                const row = document.createElement("div");
+                    const suraRow = document.createElement("div");
+                    suraRow.className = "sura-row";
 
-                row.innerHTML = `
-                    <input type="checkbox"
-                        id="sura-${i}-${index}"
-                        value="${sura}"
-                        onclick="toggleSurahDetails('${sura}', this.checked, ${i})">
+                    const suraCheckbox = document.createElement("input");
+                    suraCheckbox.type = "checkbox";
+                    suraCheckbox.id = `sura-${i}-${suraIndex}`;
+                    suraCheckbox.value = sura;  // Ensure the sura name is properly set
+                    suraCheckbox.checked = i === 60; // Check by default for Juz 1 and Juz 2
+                    suraCheckbox.onclick = () => toggleSurahDetails(sura, suraCheckbox.checked, i); // Pass Juz number
 
-                    <label for="sura-${i}-${index}">
-                        ${sura}
-                    </label>
-                `;
+                    const suraLabel = document.createElement("label");
+                    suraLabel.htmlFor = `sura-${i}-${suraIndex}`;
+                    suraLabel.textContent = sura;
 
-                surasDiv.appendChild(row);
-            });
+                    suraRow.appendChild(suraCheckbox);
+                    suraRow.appendChild(suraLabel);
+                    surasDiv.appendChild(suraRow);
+                });
 
-            partsContainer.appendChild(partDiv);
+
+                partDiv.appendChild(partHeader);
+                partDiv.appendChild(surasDiv);
+                partsContainer.appendChild(partDiv);
+            }
         }
-    }
-});
 
         // Toggle dropdown visibility
         function toggleDropdown(i) {
@@ -738,13 +728,14 @@ function stopTimer() {
     activeTimer = null;
 }
 
-
+    <footer>
+        <footer>
+            <p>© 2025 برمجة الطويلبة <strong>آية الرايس </strong>غفر الله لها.</p>
+        </footer>
+    </footer>
 </body>
 
 
 </html>
-
-
-
 
 
