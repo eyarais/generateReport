@@ -161,47 +161,16 @@
             <input type="checkbox" id="include-cumulative" checked>
         </label>
     </div>
-    <div class="section" id="hifz-section">
-    <h2>☂️ ورد الحفظ</h2>
-
-    <label>اسم السورة:</label>
-    <input type="text" id="hifz-surah" placeholder="اكتب اسم السورة">
-
-    <label>مدة التسجيل:</label>
-    <input type="text" id="hifz-timer" readonly placeholder="00:00" style="width:90px">
-
-    <button onclick="startTimer('hifz')">▶️</button>
-    <button onclick="stopTimer()">⏸</button>
-
-    <br><br>
-
-    <label>عدد التكرار:
-        <input type="number" id="hifz-repetition" value="10">
-    </label>
-
-    <label>عدد الأخطاء:
-        <input type="number" id="hifz-errors" value="0">
-    </label>
-
-    <label>عدد الترددات:
-        <input type="number" id="hifz-frequency" value="0">
-    </label>
-</div>
-
-<div class="section" id="cumulative-section">
-    <h2>☂️ ورد التراكمي</h2>
-
-    <label>صفحات التراكمي:</label>
-    <input type="text" id="cumulative-pages" placeholder="أوجه التراكمي">
-
-    <label>مدة التسجيل:</label>
-    <input type="text" id="cumulative-timer" readonly placeholder="00:00" style="width:90px">
-
-    <button onclick="startTimer('cumulative')">▶️</button>
-    <button onclick="stopTimer()">⏸</button>
-</div>
-
-    <div class="section" id="ghaybi-section">
+   <h2>☂️ ورد الحفظ</h2><label>اسم السورة: </label><input type="text" id="hifz-duration" placeholder="اكتب اسم السورة"></label><label>مدة التسجيل:
+       <input type="text" id="hifz-duration" readonly placeholder="00:00" style="width:90px"> <button onclick="startTimer('hifz-duration')">
+           ▶️</button> <button onclick="stopTimer("hifz-duration">⏸</button> <br><br> <label>عدد التكرار: <input type="number" id="hifz-repetition" value="20"></label>
+       <label>عدد الأخطاء: <input type="number" id="hifz-errors" value="0"></label>
+       <label>عدد الترددات: <input type="number" id="hifz-frequency" value="0"></label> </div> <div class="section" id="cumulative-section">
+           <h2>☂️ ورد التراكمي</h2> <label>صفحات التراكمي: <input type="text" id="cumulative-pages" placeholder="أوجه التراكمي"></label>
+           <label>مدة التسجيل: <label>اسم السورة: </label><input type="text" id="cumulative-duration" placeholder="اكتب اسم السورة"></label>
+           <label>مدة التسجيل: <input type="text" id="cumulative-duration" readonly placeholder="00:00" style="width:90px">
+               <button onclick="startTimer('cumulative-duration')">▶️</button>
+               <button onclick="stopTimer('cumulative-duration')">⏸</button> <br><br> <label>التكرار: <input type="number" id="cumulative-repetition" value="10"></label><label>عدد الأخطاء: <input type="number" id="cumulative-errors" value="0"></label><label>عدد الترددات: <input type="number" id="cumulative-frequency" value="0"></label> </div> <div class="section" id="ghaybi-section">
         <h2>☂️ ورد الغيبي</h2>
         <!-- Create a select dropdown for Juz values -->
         <label>الأحزاب: <input type="text" id="ghaybi-name" placeholder=" احزاب الغيبي"></label>
@@ -829,6 +798,7 @@ function stopTimer(surah) {
 
 
 </html>
+
 
 
 
