@@ -146,9 +146,6 @@
             </div>
         </div>
     </div>
-
-
-
     <div class="section">
         <label>
             تضمين ورد الحفظ:
@@ -163,52 +160,34 @@
     </div>
     <div class="section" id="hifz-section">
         <h2>☂️ ورد الحفظ</h2><label>اسم السورة: <input type="text" id="hifz-surah"
-                placeholder="اكتب اسم السورة"></label><label>مدة التسجيل: <input type="text" id="hifz-duration"
-                placeholder="ساعات ودقائق"></label><label>عدد التكرار: <input type="number" id="hifz-repetition"
-                value="10"></label><label>عدد الأخطاء: <input type="number" id="hifz-errors"
-                value="0"></label><label>عدد الترددات: <input type="number" id="hifz-frequency" value="0"></label>
+                placeholder="اكتب اسم السورة"></label>
+
+
+        <br><br>
+        <label>مدة التسجيل:
+            <input type="text" id="duration-hifz" readonly placeholder="00:00" style="width:90px">
+
+            <button onclick="startTimer('hifz')">▶️</button>
+            <button onclick="stopTimer('hifz')">⏸</button>
+        </label>
+
+        <label>عدد التكرار: <input type="number" id="hifz-repetition" value="10"></label><label>عدد الأخطاء: <input
+                type="number" id="hifz-errors" value="0"></label><label>عدد الترددات: <input type="number"
+                id="hifz-frequency" value="0"></label>
     </div>
     <div class="section" id="cumulative-section">
         <h2>☂️ ورد التراكمي</h2>
         <label>صفحات التراكمي: <input type="text" id="cumulative-pages" placeholder="أوجه التراكمي"></label>
-        <label>مدة التسجيل: <input type="text" id="cumulative-duration"
-                placeholder="ساعات ودقائق"></label><label>التكرار: <input type="number" id="cumulative-repetition"
-                value="10"></label><label>عدد الأخطاء: <input type="number" id="cumulative-errors"
-                value="0"></label><label>عدد الترددات: <input type="number" id="cumulative-frequency" value="0"></label>
+        <label>مدة التسجيل:
+            <input type="text" id="duration-cumulative" readonly placeholder="00:00" style="width:90px">
+
+            <button onclick="startTimer('cumulative')">▶️</button>
+            <button onclick="stopTimer('cumulative')">⏸</button>
+        </label>
+        <label>التكرار: <input type="number" id="cumulative-repetition" value="10"></label><label>عدد الأخطاء: <input
+                type="number" id="cumulative-errors" value="0"></label><label>عدد الترددات: <input type="number"
+                id="cumulative-frequency" value="0"></label>
     </div>
-    <div class="section" id="ghaybi-section">
-        <h2>☂️ ورد الغيبي</h2>
-        <!-- Create a select dropdown for Juz values -->
-        <label>الأحزاب: <input type="text" id="ghaybi-name" placeholder=" احزاب الغيبي"></label>
-
-        <br>
-        <label>مدة التسجيل: <input type="text" id="ghaybi-duration" placeholder="ساعات ودقائق"></label>
-
-        <!-- Number of mistakes with increment and decrement buttons -->
-        <label>عدد الأخطاء:</label>
-        <button type="button" class="small-button"
-            onclick="changeValue('ghaybi-errors', 'errors', 'decrement')">-</button>
-        <input type="number" class="errors small-input" id="ghaybi-errors" value="0" data-surah="ghaybi-errors" min="0">
-        <button type="button" class="small-button"
-            onclick="changeValue('ghaybi-errors', 'errors', 'increment')">+</button>
-
-        <br>
-        <label id="errors-surah-label" style="display: none;">اسم السورة : <input type="text"
-                id="ghaybi-errors-surah"></label>
-
-        <!-- Number of frequencies with increment and decrement buttons -->
-        <label>عدد الترددات:</label>
-        <button type="button" class="small-button"
-            onclick="changeValue('ghaybi-frequency', 'frequencies', 'decrement')">-</button>
-        <input type="number" class="frequencies small-input" id="ghaybi-frequency" value="0"
-            data-surah="ghaybi-frequency">
-        <button type="button" class="small-button"
-            onclick="changeValue('ghaybi-frequency', 'frequencies', 'increment')">+</button>
-        <br>
-        <label id="frequency-surah-label" style="display: none;">اسم السورة : <input type="text"
-                id="ghaybi-frequency-surah"></label>
-    </div>
-
     <div class="section">
         <h2>☂️ ورد التسميع</h2><label>مدة التسميع: <input type="text" id="tasmi3-duration"
                 placeholder="ساعات ودقائق"></label><label>تم التسميع : <input type="text" id="tasmi3-person"
@@ -266,83 +245,24 @@
         { name: "سورة إبراهيم", juz: "حزب 28" },
         { name: "سورة الحجر", juz: "حزب 29" },
         { name: "سورة النحل", juz: "حزب 30" },
-{ name: "سورة الشعراء", juz: "حزب 38" },
-{ name: "سورة النمل", juz: "حزب 39" },
-{ name: "سورة القصص", juz: "حزب 40" },
-{ name: "سورة العنكبوت", juz: "حزب 42" },
-{ name: "سورة الروم", juz: "حزب 43" },
-{ name: "سورة لقمان", juz: "حزب 44" },
-{ name: "سورة السجدة", juz: "حزب 44" },
-{ name: "سورة الأحزاب", juz: "حزب 45" },
-{ name: "سورة سبأ", juz: "حزب 46" },
-{ name: "سورة فاطر", juz: "حزب 46" },
-{ name: "سورة يس", juz: "حزب 47" },
+        { name: "سورة الشعراء", juz: "حزب 38" },
+        { name: "سورة النمل", juz: "حزب 39" },
+        { name: "سورة القصص", juz: "حزب 40" },
+        { name: "سورة العنكبوت", juz: "حزب 42" },
+        { name: "سورة الروم", juz: "حزب 43" },
+        { name: "سورة لقمان", juz: "حزب 44" },
+        { name: "سورة السجدة", juz: "حزب 44" },
+        { name: "سورة الأحزاب", juz: "حزب 45" },
+        { name: "سورة سبأ", juz: "حزب 46" },
+        { name: "سورة فاطر", juz: "حزب 46" },
+        { name: "سورة يس", juz: "حزب 47" },
 
         { name: "سورة ق", juz: "حزب 52" },
-        { name: "سورة الذاريات", juz: "حزب 53" },
-        { name: "سورة الطور", juz: "حزب 53" },
-        { name: "سورة النجم", juz: "حزب 53" },
-        { name: "سورة القمر", juz: "حزب 53" },
-        { name: "سورة الرحمان", juz: "حزب 54" },
-        { name: "سورة الواقعة", juz: "حزب 54" },
-        { name: "سورة الحديد", juz: "حزب 54" },
-        { name: "سورة المجادلة", juz: "حزب 55" },
-        { name: "سورة الحشر", juz: "حزب 55" },
-        { name: "سورة الممتحنة", juz: "حزب 55" },
-        { name: "سورة الصف", juz: "حزب 55" },
-        { name: "سورة الجمعة", juz: "حزب 56" },
-        { name: "سورة المنافقون", juz: "حزب 56" },
-        { name: "سورة التغابن", juz: "حزب 56" },
-        { name: "سورة الطلاق", juz: "حزب 56" },
-        { name: "سورة التحريم", juz: "حزب 56" },
-        { name: "سورة الملك", juz: "حزب 57" },
-        { name: "سورة القلم", juz: "حزب 57" },
-        { name: "سورة الحاقة", juz: "حزب 57" },
-        { name: "سورة المعارج", juz: "حزب 57" },
-        { name: "سورة نوح", juz: "حزب 57" },
-        { name: "سورة الجن", juz: "حزب 58" },
-        { name: "سورة المزمل", juz: "حزب 58" },
-        { name: "سورة المدثر", juz: "حزب 58" },
-        { name: "سورة القيامة", juz: "حزب 58" },
-        { name: "سورة الإنسان", juz: "حزب 58" },
-        { name: "سورة المرسلات", juz: "حزب 58" },
-        { name: "سورة النبأ", juz: "حزب 59" },
-        { name: "سورة النازعات", juz: "حزب 59" },
-        { name: "سورة عبس", juz: "حزب 59" },
-        { name: "سورة التكوير", juz: "حزب 59" },
-        { name: "سورة الإنفطار", juz: "حزب 59" },
-        { name: "سورة المطففين", juz: "حزب 59" },
-        { name: "سورة الانشقاق", juz: "حزب 59" },
-        { name: "سورة البروج", juz: "حزب 59" },
-        { name: "سورة الطارق", juz: "حزب 59" },
-        { name: "سورة الأعلى", juz: "حزب 60" },
-        { name: "سورة الغاشية", juz: "حزب 60" },
-        { name: "سورة الفجر", juz: "حزب 60" },
-        { name: "سورة البلد", juz: "حزب 60" },
-        { name: "سورة الشمس", juz: "حزب 60" },
-        { name: "سورة الليل", juz: "حزب 60" },
-        { name: "سورة الضحى", juz: "حزب 60" },
-        { name: "سورة الشرح", juz: "حزب 60" },
-        { name: "سورة التين", juz: "حزب 60" },
-        { name: "سورة العلق", juz: "حزب 60" },
-        { name: "سورة القدر", juz: "حزب 60" },
-        { name: "سورة البينة", juz: "حزب 60" },
-        { name: "سورة الزلزلة", juz: "حزب 60" },
-        { name: "سورة العاديات", juz: "حزب 60" },
-        { name: "سورة القارعة", juz: "حزب 60" },
-        { name: "سورة التكاثر", juz: "حزب 60" },
-        { name: "سورة العصر", juz: "حزب 60" },
-        { name: "سورة الهمزة", juz: "حزب 60" },
-        { name: "سورة الفيل", juz: "حزب 60" },
-        { name: "سورة قريش", juz: "حزب 60" },
-        { name: "سورة الماعون", juz: "حزب 60" },
-        { name: "سورة الكوثر", juz: "حزب 60" },
-        { name: "سورة الكافرون", juz: "حزب 60" },
-        { name: "سورة النصر", juz: "حزب 60" },
-        { name: "سورة المسد", juz: "حزب 60" },
-        { name: "سورة الإخلاص", juz: "حزب 60" },
-        { name: "سورة الفلق", juz: "حزب 60" },
-        { name: "سورة الناس", juz: "حزب 60" }
+        { name: "حزب الذاريات", juz: "حزب 53" },
+        { name: "حزب الجمعة", juz: "حزب 56" },
+        { name: "حزب الجن", juz: "حزب 58" },
+        { name: "حزب الأعلى", juz: "حزب 60" },
+
         ];
 
         // Function to extract unique 'juz' values and populate the select dropdown with the first Surah of each Juz
@@ -465,7 +385,7 @@
                 const partHeader = document.createElement("div");
                 partHeader.className = "part-header";
                 partHeader.innerHTML = `
-                <input type="checkbox" id="juz-${i}" ${i === 60 ? "checked" : ""} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
+                <input type="checkbox" id="juz-${i}"} onchange="toggleJuzSelection(${i}, '${juz}', this.checked)" />
                 <label for="juz-${i}">${juz} : حزب ${firstSurah.name}</label>
                 <button class="expand-btn" onclick="toggleDropdown(${i})">⬇️</button>
             `;
@@ -488,7 +408,7 @@
                     suraCheckbox.type = "checkbox";
                     suraCheckbox.id = `sura-${i}-${suraIndex}`;
                     suraCheckbox.value = sura;  // Ensure the sura name is properly set
-                    suraCheckbox.checked = i === 60; // Check by default for Juz 1 and Juz 2
+                    //suraCheckbox.checked = i === 60; // Check by default for Juz 1 and Juz 2
                     suraCheckbox.onclick = () => toggleSurahDetails(sura, suraCheckbox.checked, i); // Pass Juz number
 
                     const suraLabel = document.createElement("label");
@@ -569,43 +489,43 @@
                     const detailDiv = document.createElement("div");
                     detailDiv.id = `detail-${surahName}`;
                     detailDiv.dataset.juz = juz;
-                  detailDiv.innerHTML = `
+                    detailDiv.innerHTML = `
+<div style="display:flex; justify-content:space-between; align-items:center;">
     <h4>${surahName}:</h4>
 
-    <label>مدة التسميع:</label>
-    <input type="text"
-           id="duration-${surahName}"
-           readonly
-           placeholder="00:00"
-           style="width:90px">
+    <label style="font-size:14px;">
+        غيبي
+        <input type="checkbox"
+               class="ghaybi-checkbox"
+               data-surah="${surahName}">
+    </label>
+</div>
 
-    <button onclick="startTimer('${surahName}')">▶️</button>
-    <button onclick="stopTimer('${surahName}')">⏸</button>
+<label>مدة التسميع:</label>
+<input type="text"
+       id="duration-${surahName}"
+       readonly
+       placeholder="00:00"
+       style="width:90px">
 
-    <br><br>
+<button onclick="startTimer('${surahName}')">▶️</button>
+<button onclick="stopTimer('${surahName}')">⏸</button>
 
-    <label>عدد الأخطاء:</label>
-    <button type="button" class="small-button"
-        onclick="changeValue('errors-${surahName}', 'errors', 'decrement')">-</button>
+<br><br>
 
-    <input type="number" class="errors small-input"
-        id="errors-${surahName}" value="0">
+<label>عدد الأخطاء:</label>
+<button onclick="changeValue('errors-${surahName}','errors','decrement')">-</button>
+<input type="number" id="errors-${surahName}" class="errors" value="0">
+<button onclick="changeValue('errors-${surahName}','errors','increment')">+</button>
 
-    <button type="button" class="small-button"
-        onclick="changeValue('errors-${surahName}', 'errors', 'increment')">+</button>
+<br>
 
-    <br>
-
-    <label>عدد الترددات:</label>
-    <button type="button" class="small-button"
-        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'decrement')">-</button>
-
-    <input type="number" class="frequencies small-input"
-        id="frequencies-${surahName}" value="0">
-
-    <button type="button" class="small-button"
-        onclick="changeValue('frequencies-${surahName}', 'frequencies', 'increment')">+</button>
+<label>عدد الترددات:</label>
+<button onclick="changeValue('frequencies-${surahName}','frequencies','decrement')">-</button>
+<input type="number" id="frequencies-${surahName}" class="frequencies" value="0">
+<button onclick="changeValue('frequencies-${surahName}','frequencies','increment')">+</button>
 `;
+
                     selectedDetailsDiv.appendChild(detailDiv);
                 }
             } else {
@@ -621,98 +541,131 @@
                 toggleSurahDetails(checkbox.value, true);
             });
         }
-async function generateReport() {
+        async function generateReport() {
 
-    const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
+            const dayName = new Date().toLocaleDateString('ar-EG', { weekday: 'long' });
 
-    let output = `💌التقرير اليومي 💌\n\n`;
-    output += `🌱 ليوم ${dayName} 🌱\n\n`;
-    output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
+            let output = `💌 *التقرير اليومي* 💌\n\n`;
+            output += `🌱 *ليوم ${dayName}* 🌱\n`;
+            output += `━━━━━━━━━━━━━━━\n\n`;
 
-    /* ======================
-        🌹 ورد الحفظ
-    ======================= */
+            /* 🌹 ورد الحفظ */
 
-    if (document.getElementById('include-hifz').checked) {
+            if (document.getElementById('include-hifz').checked) {
 
-        output += `🌹ورد الحفظ 🌹\n`;
+                output += `🌹 *ورد الحفظ* 🌹\n\n`;
 
-        output += `الوجه عدد: ${document.getElementById('hifz-surah').value || "غير محدد"}\n`;
-        output += `\nالمدة: ${document.getElementById('hifz-duration').value || "0"}\n`;
-        output += `عدد الأخطاء : ${document.getElementById('hifz-errors').value || 0}\n`;
-        output += `عدد الترددات: ${document.getElementById('hifz-frequency').value || 0}\n\n`;
-        output += `عدد التكرار : *${document.getElementById('hifz-repetition').value || 0}*\n\n`;
-        output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n\n`;
-    }
+                output += `📖 *الوجه:* ${document.getElementById('hifz-surah').value || "غير محدد"}\n`;
 
-    /* ======================
-        🌷 ورد التراكمي
-    ======================= */
+                const hifzDuration = document.getElementById('duration-hifz').value;
+                if (hifzDuration && hifzDuration !== "00:00") {
+                    output += `⏱ *المدة:* ${hifzDuration}\n`;
+                }
 
-    if (document.getElementById('include-cumulative').checked) {
+                output += `❌ *الأخطاء:* ${document.getElementById('hifz-errors').value || 0}\n`;
+                output += `⭕ *الترددات:* ${document.getElementById('hifz-frequency').value || 0}\n`;
+                output += `🔂 *عدد التكرار:* *${document.getElementById('hifz-repetition').value || 0}*\n\n`;
+                output += `━━━━━━━━━━━━━━━\n\n`;
+            }
 
-        output += `ورد التراكمي 🌷: ${document.getElementById('cumulative-pages').value || ""}\n`;
-        output += `المدة: ${document.getElementById('cumulative-duration').value || "0"}\n`;
-        output += `عدد التكرار: ${document.getElementById('cumulative-repetition').value || 0}\n`;
-        output += `عدد الأخطاء: ${document.getElementById('cumulative-errors').value || 0}\n`;
-        output += `عدد الترددات: ${document.getElementById('cumulative-frequency').value || 0}\n`;
-        output += `🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
-    }
+            /* 🌷 ورد التراكمي */
 
-    /* ======================
-        🌷 ورد التسميع
-    ======================= */
+            if (document.getElementById('include-cumulative').checked) {
 
-    output += `ورد التسميع:\n`;
+                output += `🌷 *ورد التراكمي* 🌷\n\n`;
 
-    document.querySelectorAll('#selected-details > div').forEach(div => {
+                output += `📄 *الأوجه:* ${document.getElementById('cumulative-pages').value || ""}\n`;
 
-        const surahName = div.querySelector('h4')?.innerText.replace(":", "");
-        if (!surahName) return;
+                const cumDuration = document.getElementById('duration-cumulative').value;
+                if (cumDuration && cumDuration !== "00:00") {
+                    output += `⏱ *المدة:* ${cumDuration}\n`;
+                }
 
-        const errors = div.querySelector('.errors')?.value || 0;
-        const freq = div.querySelector('.frequencies')?.value || 0;
-        const duration = document.getElementById(`duration-${surahName}`)?.value || "0";
+                output += `🔂 *التكرار:* ${document.getElementById('cumulative-repetition').value || 0}\n`;
+                output += `❌ *الأخطاء:* ${document.getElementById('cumulative-errors').value || 0}\n`;
+                output += `⭕ *الترددات:* ${document.getElementById('cumulative-frequency').value || 0}\n\n`;
 
-        output += `🌷${surahName}\n`;
-        output += `المدة: ${duration}دق\n`;
-        output += `عدد الترددات: ${freq}\n`;
-        output += `عدد الأخطاء: ${errors}\n`;
-    });
+                output += `━━━━━━━━━━━━━━━\n\n`;
+            }
 
-    output += `\n🌿🌸🌿🌸🌟🌿🌸🌿🌸\n`;
+            /* 📖 التسميع والغيبي */
 
-    /* ======================
-        🌷 ورد الغيبي
-    ======================= */
+            const tasmi3 = [];
+            const ghaybi = [];
 
-    output += `ورد الغيبي: ✅\n\n`;
+            document.querySelectorAll('#selected-details > div').forEach(div => {
 
-    /* ======================
-        📘 المهام
-    ======================= */
+                const surahName = div.querySelector('h4')?.innerText.replace(":", "");
+                if (!surahName) return;
 
-    output += `🎧 التّحضيرُ القبلي 🎧 : ${getStatus("preparation")}\n\n`;
+                const isGhaybi = div.querySelector('.ghaybi-checkbox')?.checked;
 
-    output += `🌸🌿🌸🌿🌸🌿🌼🌸🌿🌸🌿🌸🌿\n\n`;
+                const errors = div.querySelector('.errors')?.value || 0;
+                const freq = div.querySelector('.frequencies')?.value || 0;
+                const duration =
+                    document.getElementById(`duration-${surahName}`)?.value || "00:00";
 
-    output += `📚سماع أو قراءة تفسير 📚: ${getStatus("tafseer")}\n`;
-    output += `🕌ورد المحراب🕌: ${getStatus("mihrab")}\n`;
-    output += `📑ورد المتشابهات 📑: ${getStatus("motchebeh")}\n`;
-    output += `🌧️ورد الختمة🌧️ : ${getStatus("monthly-completion")}\n`;
+                const data = { name: surahName, errors, freq, duration };
 
-    output += `🌿🌸🌿🌸🌼🌸🌿🌸🌿🌸\n\n`;
+                isGhaybi ? ghaybi.push(data) : tasmi3.push(data);
+            });
 
-    output += `🌺 إتمامُ أذكارِ الصباح والمساء،\n`;
-    output += `والإكثارُ مِن الدُّعاء الصالحات  والتسبيح🌺\n\n`;
+            /* 📖 ورد التسميع */
 
-    output += `☝🏻اللهم أعنا ولا تعن علينا ☝🏻\n\n`;
-    output += `💞والحمدُ للهِ الذي بنعمتِه تَتِمُّ الصالحات`;
+            if (tasmi3.length > 0) {
+                output += `📖 *ورد التسميع* 📖\n\n`;
 
-    document.getElementById('copy-field').value = output;
-    window.reportOutput = output;
-    document.getElementById('output').classList.remove('hidden');
+                tasmi3.forEach(s => {
+                    output += `🌸 *${s.name}*\n`;
+
+                    if (s.duration !== "00:00") {
+                        output += `⏱ المدة: ${s.duration}\n`;
+                    }
+
+                    output += `⭕ الترددات: ${s.freq}\n`;
+                    output += `❌ الأخطاء: ${s.errors}\n\n`;
+                });
+
+                output += `━━━━━━━━━━━━━━━\n\n`;
+            }
+
+            /* 🌙 ورد الغيبي */
+
+            if (ghaybi.length > 0) {
+                output += `🌙 *ورد الغيبي* 🌙\n\n`;
+
+                ghaybi.forEach(s => {
+                    output += `✨ *${s.name}*\n`;
+
+                    if (s.duration !== "00:00") {
+                        output += `⏱ المدة: ${s.duration}\n`;
+                    }
+
+                    output += `⭕ الترددات: ${s.freq}\n`;
+                    output += `❌ الأخطاء: ${s.errors}\n\n`;
+                });
+
+                output += `━━━━━━━━━━━━━━━\n\n`;
+            }
+
+            /* 📘 المهام */
+
+            output += `📘 *المهام اليومية*\n\n`;
+            output += `🎧 التحضير القبلي: ${getStatus("preparation")}\n`;
+            output += `📚 التفسير: ${getStatus("tafseer")}\n`;
+            output += `🕌 ورد المحراب: ${getStatus("mihrab")}\n`;
+            output += `📑 المتشابهات: ${getStatus("motchebeh")}\n`;
+            output += `🌧️ الختمة: ${getStatus("monthly-completion")}\n`;
+            output += `💕 الأذكار: ${getStatus("athkar")}\n\n`;
+
+            output += '🌿🌸🌿🌸🌟🌿🌸🌿🌸\n\n';
+            output += `🤍 *والحمدُ للهِ الذي بنعمتِه تتمُّ الصالحات* 🤍`;
+
+            document.getElementById('copy-field').value = output;
+            window.reportOutput = output;
+            document.getElementById('output').classList.remove('hidden');
         }
+
         let output = "";
 
         function getStatus(name) {
@@ -769,29 +722,48 @@ async function generateReport() {
             }
         }
 
-const timers = {};
-const timerIntervals = {};
+        let timers = {};
+        let timerIntervals = {};
+        let activeTimer = null; // المؤقت الحالي
 
-function startTimer(surah) {
-    if (!timers[surah]) timers[surah] = 0;
+        function startTimer(surah) {
 
-    if (timerIntervals[surah]) return;
+            // ⛔ أوقفي أي مؤقت شغال
+            if (activeTimer && activeTimer !== surah) {
+                clearInterval(timerIntervals[activeTimer]);
+                timerIntervals[activeTimer] = null;
+            }
 
-    timerIntervals[surah] = setInterval(() => {
-        timers[surah]++;
+            // لو المؤقت هذا شغال أصلاً لا تعيدي تشغيله
+            if (timerIntervals[surah]) return;
 
-        const minutes = Math.floor(timers[surah] / 60);
-        const seconds = timers[surah] % 60;
+            if (!timers[surah]) timers[surah] = 0;
 
-        document.getElementById(`duration-${surah}`).value =
-            `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    }, 1000);
-}
+            activeTimer = surah;
 
-function stopTimer(surah) {
-    clearInterval(timerIntervals[surah]);
-    timerIntervals[surah] = null;
+            timerIntervals[surah] = setInterval(() => {
+                timers[surah]++;
+
+                const minutes = Math.floor(timers[surah] / 60);
+                const seconds = timers[surah] % 60;
+
+                const input = document.getElementById(`duration-${surah}`);
+                if (input) {
+                    input.value =
+                        `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                }
+            }, 1000);
         }
+
+        function stopTimer(surah) {
+            clearInterval(timerIntervals[surah]);
+            timerIntervals[surah] = null;
+
+            if (activeTimer === surah) {
+                activeTimer = null;
+            }
+        }
+
 
     </script>
 
