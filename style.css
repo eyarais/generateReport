@@ -298,7 +298,25 @@ textarea:focus {
 footer {
   opacity: 0.8;
   font-size: 14px;
+} 
+.counter-ui {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
 }
+
+/* keep center clean */
+.counter-ui input {
+  text-align: center;
+}
+
+/* make buttons same height as input */
+.counter-ui button {
+  height: 28px;
+  min-width: 28px;
+  padding: 0;
+} 
 
 /* =====================
    📱 Responsive
@@ -327,5 +345,6 @@ footer {
     padding: 15px;
   }
 }
+
 
 
