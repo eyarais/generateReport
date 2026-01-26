@@ -514,17 +514,33 @@
 <br><br>
 
 <label>عدد الأخطاء:</label>
-<button onclick="changeValue('errors-${surahName}','errors','decrement')">-</button>
-<input type="number" id="errors-${surahName}" class="errors" value="0">
-<button onclick="changeValue('errors-${surahName}','errors','increment')">+</button>
+<div class="counter-ui">
+  <button class="small-button"
+    onclick="changeValue('errors-${surahName}','errors','decrement')">−</button>
 
+  <input type="number"
+    id="errors-${surahName}"
+    class="small-input errors"
+    value="0">
+
+  <button class="small-button"
+    onclick="changeValue('errors-${surahName}','errors','increment')">+</button>
+</div>
 <br>
 
 <label>عدد الترددات:</label>
-<button onclick="changeValue('frequencies-${surahName}','frequencies','decrement')">-</button>
-<input type="number" id="frequencies-${surahName}" class="frequencies" value="0">
-<button onclick="changeValue('frequencies-${surahName}','frequencies','increment')">+</button>
-`;
+<div class="counter-ui">
+  <button class="small-button"
+    onclick="changeValue('frequencies-${surahName}','frequencies','decrement')">−</button>
+
+  <input type="number"
+    id="frequencies-${surahName}"
+    class="small-input frequencies"
+    value="0">
+
+  <button class="small-button"
+    onclick="changeValue('frequencies-${surahName}','frequencies','increment')">+</button>
+</div>`;
 
                     selectedDetailsDiv.appendChild(detailDiv);
                 }
@@ -776,3 +792,4 @@
 
 
 </html>
+
